@@ -1,0 +1,7 @@
+{# purpose of this template: maps index view #}
+{% extends routeArea == 'admin' ? 'TdMMapsModule::adminBase.html.twig' : 'TdMMapsModule::base.html.twig' %}
+{% block title __('maps') %}
+{% block admin_page_icon 'home' %}
+{% block content %}
+    <p>{{ __('Welcome to the map section of the Maps application.') }}</p>
+{% endblock %}

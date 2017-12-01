@@ -1,0 +1,96 @@
+{# purpose of this template: maps view filter form #}
+{% if hasPermission('TdMMapsModule:Map:', '::', 'ACCESS_EDIT') %}
+    {% form_theme quickNavForm with [
+        'bootstrap_3_layout.html.twig'
+    ] %}
+    {{ form_start(quickNavForm, {attr: {id: 'tdMMapsModuleMapQuickNavForm', class: 'tdmmapsmodule-quicknav navbar-form', role: 'navigation'}}) }}
+    {{ form_errors(quickNavForm) }}
+    <a href="#collapseMapQuickNav" role="button" data-toggle="collapse" class="btn btn-default" aria-expanded="false" aria-controls="collapseMapQuickNav">
+        <i class="fa fa-filter" aria-hidden="true"></i> {{ __('Filter') }}
+    </a>
+    <div id="collapseMapQuickNav" class="collapse">
+        <fieldset>
+            <h3>{{ __('Quick navigation') }}</h3>
+            {% if workflowStateFilter is defined and workflowStateFilter != true %}
+                <div class="hidden">
+            {% endif %}
+                {{ form_row(quickNavForm.workflowState) }}
+            {% if workflowStateFilter is defined and workflowStateFilter != true %}
+                </div>
+            {% endif %}
+            {% if testStateFilter is defined and testStateFilter != true %}
+                <div class="hidden">
+            {% endif %}
+                {{ form_row(quickNavForm.testState) }}
+            {% if testStateFilter is defined and testStateFilter != true %}
+                </div>
+            {% endif %}
+            {% if gameFilter is defined and gameFilter != true %}
+                <div class="hidden">
+            {% endif %}
+                {{ form_row(quickNavForm.game) }}
+            {% if gameFilter is defined and gameFilter != true %}
+                </div>
+            {% endif %}
+            {% if sizeMapFilter is defined and sizeMapFilter != true %}
+                <div class="hidden">
+            {% endif %}
+                {{ form_row(quickNavForm.sizeMap) }}
+            {% if sizeMapFilter is defined and sizeMapFilter != true %}
+                </div>
+            {% endif %}
+            {% if languageMapFilter is defined and languageMapFilter != true %}
+                <div class="hidden">
+            {% endif %}
+                {{ form_row(quickNavForm.languageMap) }}
+            {% if languageMapFilter is defined and languageMapFilter != true %}
+                </div>
+            {% endif %}
+            {% if difficultyFilter is defined and difficultyFilter != true %}
+                <div class="hidden">
+            {% endif %}
+                {{ form_row(quickNavForm.difficulty) }}
+            {% if difficultyFilter is defined and difficultyFilter != true %}
+                </div>
+            {% endif %}
+            {% if gameTypeFilter is defined and gameTypeFilter != true %}
+                <div class="hidden">
+            {% endif %}
+                {{ form_row(quickNavForm.gameType) }}
+            {% if gameTypeFilter is defined and gameTypeFilter != true %}
+                </div>
+            {% endif %}
+            {% if searchFilter is defined and searchFilter != true %}
+                <div class="hidden">
+            {% endif %}
+                {{ form_row(quickNavForm.q) }}
+            {% if searchFilter is defined and searchFilter != true %}
+                </div>
+            {% endif %}
+            {% if sorting is defined and sorting != true %}
+                <div class="hidden">
+            {% endif %}
+                {{ form_row(quickNavForm.sort) }}
+                {{ form_row(quickNavForm.sortdir) }}
+            {% if sorting is defined and sorting != true %}
+                </div>
+            {% endif %}
+            {% if pageSizeSelector is defined and pageSizeSelector != true %}
+                <div class="hidden">
+            {% endif %}
+                {{ form_row(quickNavForm.num) }}
+            {% if pageSizeSelector is defined and pageSizeSelector != true %}
+                </div>
+            {% endif %}
+            {% if bUndergroundFilter is defined and bUndergroundFilter != true %}
+                <div class="hidden">
+            {% endif %}
+                {{ form_row(quickNavForm.bUnderground) }}
+            {% if bUndergroundFilter is defined and bUndergroundFilter != true %}
+                </div>
+            {% endif %}
+            {{ form_widget(quickNavForm.updateview) }}
+        </fieldset>
+    </div>
+    {{ form_end(quickNavForm) }}
+{% endif %}

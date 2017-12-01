@@ -1,0 +1,40 @@
+<!--[* $Id: Mapas_user_error.htm 31 2011-10-17 20:55:41Z Krator $ *]-->
+<!--[ include file="Mapas_user_menu.htm" ]-->
+
+<div align="center">
+	<!--[* Campos obligatorios *]-->
+	<!--[if $tipo_error EQ 1]-->
+
+		<!--[gt text='You have not filled all the mandatory fields']--><br>
+		<a href="javascript:history.back()"><!--[gt text='Go back']--></a>
+		
+	<!--[/if]-->
+	<!--[* Creacion de carpetas en el servidor *]-->
+	<!--[if $tipo_error EQ 2]-->
+
+		<!--[gt text='It has not been to create the folder']-->:&nsbp;<!--[$carpeta]--><br>
+		<a href="javascript:history.back()"><!--[gt text='Go back']--></a>
+		
+	<!--[/if]-->
+	<!--[* Subida de ficheros al servidor *]-->
+	<!--[if $tipo_error EQ 3]-->
+
+		<!--[gt text='If not possible upload the file']-->:&nsbp;<!--[$fichero]--><br>
+		<a href="javascript:history.back()"><!--[gt text='Go back']--></a>
+		
+	<!--[/if]-->
+	<!--[* El usuario no existe *]-->
+	<!--[if $tipo_error EQ 4]-->
+
+		<!--[gt text='The user do not exist']-->:&nsbp;<!--[$user]--><br>
+		<a href="javascript:history.back()"><!--[gt text='Go back']--></a>
+		
+	<!--[/if]-->
+	<!--[* La fecha es superior a la actual *]-->
+	<!--[if $tipo_error EQ 5]-->
+
+		<!--[gt text='The battle date is upper than the actual date.']--><br>
+		<a href="javascript:history.back()"><!--[gt text='Go back']--></a>
+		
+	<!--[/if]-->
+</div>

@@ -1,0 +1,253 @@
+{{ include("@TdMMapsModule/Resources/views/Custom/menu.html.twig") }}
+
+<div class="title">
+	<h1>{{ __('Last 10 maps') }}</h1>
+</div>
+
+{% if nmaps == 0 %}
+	{{ __('No maps for display') }}
+{% else %}
+	<div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover table-condensed">
+            <colgroup>
+                <col id="cLanguageMap" />
+				<col id="cName" />
+                <col id="cAuthor" />
+                <col id="cGame" />
+                <col id="cSizeMap" />
+                <col id="cHumJug" />
+                <col id="cGameType" />
+				<col id="cDifficulty" />
+				<col id="cScoreRev" />
+				<col id="cNDownloads" />
+				<col id="cDownloadAction" />
+            </colgroup>
+            <thead>
+            <tr>
+                <th id="hLanguageMap" scope="col" class="text-left"><img src="{{ zasset('@TdMMapsModule:images/globo.gif') }}" width="20" height="22" alt="{{ __('Language')|e('html_attr') }}" title="{{ __('Language')|e('html_attr') }}" /></th>
+				<th id="hName" scope="col" class="text-left">{{ __('Map Name') }}</th>
+                <th id="hAuthor" scope="col" class="text-left">{{ __('Author') }}</th>
+                <th id="hGame" scope="col" class="text-left">{{ __('Game') }}</th>
+                <th id="hSizeMap" scope="col" class="text-left">{{ __('Size') }}</th>
+                <th id="hHumJug" scope="col" class="text-center">{{ __('H/J') }}</th>
+                <th id="hGameType" scope="col" class="text-left">{{ __('Type') }}</th>
+				<th id="hDifficulty" scope="col" class="text-left">{{ __('Difficulty') }}</th>
+				<th id="hScoreRev" scope="col" class="text-right">{{ __('Revision') }}</th>
+				<th id="hNDownloads" scope="col" class="text-right">{{ __('Downloads') }}</th>
+				<th id="hDownloadAction" scope="col" class="text-right"><center><i class="fa fa-cloud-download"></i></center></th>
+            </tr>
+            </thead>
+            <tbody>
+        
+        {% for map in lastTen %}
+            <tr>
+                <td headers="hLanguageMap" class="text-left">
+					{% if map.languageMap == "Spanish" %}
+						<img src="{{ zasset('@TdMMapsModule:images/espanol.gif') }}" width="30" height="16" alt="{{ map.languageMap|tdmmapsmodule_listEntry('map', 'languageMap') }}" title="{{ map.languageMap|tdmmapsmodule_listEntry('map', 'languageMap') }}" />
+					{% elseif map.languageMap == "English" %}
+						<img src="{{ zasset('@TdMMapsModule:images/ingles.gif') }}" width="30" height="16" alt="{{ map.languageMap|tdmmapsmodule_listEntry('map', 'languageMap') }}" title="{{ map.languageMap|tdmmapsmodule_listEntry('map', 'languageMap') }}" />
+					{% else %}
+						<img src="{{ zasset('@TdMMapsModule:images/otro.gif') }}" width="30" height="16" alt="{{ map.languageMap|tdmmapsmodule_listEntry('map', 'languageMap') }}" title="{{ map.languageMap|tdmmapsmodule_listEntry('map', 'languageMap') }}" />
+					{% endif %}
+				</td>
+				<td headers="hName" class="text-left">
+                    <a href="{{ path('tdmmapsmodule_map_display', {'id': map.getId()}) }}" title="{{ __('View detail page')|e('html_attr') }}">{{ map.name|notifyFilters('tdmmapsmodule.filterhook.maps')|safeHtml }}</a>
+                </td>
+                <td headers="hAuthor" class="text-left">
+                    {{ map.author }}
+                </td>
+                <td headers="hGame" class="text-left">
+                    {{ map.game|tdmmapsmodule_listEntry('map', 'game') }}
+                </td>
+                <td headers="hSizeMap" class="text-left">
+                    {{ map.sizeMap|tdmmapsmodule_listEntry('map', 'sizeMap') }}
+                </td>
+                <td headers="hHumJug" class="text-center">
+                    {{ map.nHumans }}/{{ map.nPlayers }}
+                </td>
+                <td headers="hGameType" class="text-left">
+                    {{ map.gameType|tdmmapsmodule_listEntry('map', 'gameType') }}
+                </td>
+				<td headers="hDifficulty" class="text-left">
+                    {{ map.difficulty|tdmmapsmodule_listEntry('map', 'difficulty') }}
+                </td>
+				<td headers="hScoreRev" class="text-right">
+                    {% if map.scoreRev == 0 %}
+						{{ map.scoreRev }}
+					{% else %}
+						{{ map.scoreRev / map.nScoreRev }}
+					{% endif %}
+                </td>
+				<td headers="hNDownloads" class="text-right">
+                    {{ map.nDownloads }}
+                </td>
+				<td headers="hMapFile" class="text-left">
+                    {% if map.mapFileMeta|default %}
+                    <a href="{{ map.mapFileUrl }}" title="{{ map|tdmmapsmodule_formattedTitle|e('html_attr') }}"{% if map.mapFileMeta.isImage %} class="image-link"{% endif %}>
+                    {% if map.mapFileMeta.isImage %}
+                        {% set thumbOptions = attribute(thumbRuntimeOptions, 'mapMapFile') %}
+                        <img src="{{ map.mapFile.getPathname()|imagine_filter('zkroot', thumbOptions) }}" alt="{{ map|tdmmapsmodule_formattedTitle|e('html_attr') }}" width="{{ thumbOptions.thumbnail.size[0] }}" height="{{ thumbOptions.thumbnail.size[1] }}" class="img-thumbnail" />
+                    {% else %}
+                        <i class="fa fa-cloud-download"></i> ({{ map.mapFileMeta.size|tdmmapsmodule_fileSize(map.mapFile.getPathname(), false, false) }})
+                    {% endif %}
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr class="z-datatableempty">
+                <td class="text-left" colspan="23">
+            {{ __('No maps found.') }}
+              </td>
+            </tr>
+        {% endfor %}
+        
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+
+<div style="clear: both;height: 20px;"></div>
+
+<div id="bloqueCart" class="bloqueCart">
+	<div class="title">
+		<h2>{{ __('Top Ten (Cartographer)') }}</h2>
+	</div>
+
+	<table class="z-admintable">
+		<tr>
+			<th><div align="center"><strong>{{ __('Map Name') }}</strong></div></th>
+			<th><div align="center"><strong>{{ __('Revision') }}</strong></div></th>
+			<th><div align="center"></div></th>
+		</tr>
+		{% for map in topTenCar %}
+		<tr>
+			<td width="165" align="left">
+				<a href="{{ path('tdmmapsmodule_map_display', {'id': map.id}) }}" title="{{ __('View detail page')|e('html_attr') }}">{{ map.name|notifyFilters('tdmmapsmodule.filterhook.maps')|safeHtml }}</a>
+			</td>
+			<td width="30" align="center">{{ map.puntuacion|round(1, 'common') }}</td>
+			<td width="15" align="center">
+				
+				<i class="fa fa-cloud-download"></i>{{ __('Download') }}
+			</td>
+		</tr>
+		{% else %}
+            <tr class="z-datatableempty">
+                <td class="text-left" colspan="23">
+            {{ __('No maps found.') }}
+              </td>
+            </tr>
+        {% endfor %}
+	</table>
+</div>
+
+<div style="clear: both;height: 20px;"></div>
+
+<div class="title">
+	<h1>{{ __('Top Ten (Users)') }}Nos falta el modulo Ratings!</h1>
+</div>
+
+<div style="clear: both;height: 20px;"></div>
+
+<div class="title">
+	<h1>{{ __('Most Downloaded') }}</h1>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover table-condensed">
+        <colgroup>
+            <col id="cLanguageMap" />
+			<col id="cName" />
+            <col id="cAuthor" />
+            <col id="cGame" />
+            <col id="cSizeMap" />
+            <col id="cHumJug" />
+            <col id="cGameType" />
+			<col id="cDifficulty" />
+			<col id="cScoreRev" />
+			<col id="cNDownloads" />
+			<col id="cDownloadAction" />
+        </colgroup>
+        <thead>
+        <tr>
+            <th id="hLanguageMap" scope="col" class="text-left"><img src="{{ zasset('@TdMMapsModule:images/globo.gif') }}" width="20" height="22" alt="{{ __('Language')|e('html_attr') }}" title="{{ __('Language')|e('html_attr') }}" /></th>
+			<th id="hName" scope="col" class="text-left">{{ __('Map Name') }}</th>
+            <th id="hAuthor" scope="col" class="text-left">{{ __('Author') }}</th>
+            <th id="hGame" scope="col" class="text-left">{{ __('Game') }}</th>
+            <th id="hSizeMap" scope="col" class="text-left">{{ __('Size') }}</th>
+            <th id="hHumJug" scope="col" class="text-center">{{ __('H/J') }}</th>
+            <th id="hGameType" scope="col" class="text-left">{{ __('Type') }}</th>
+			<th id="hDifficulty" scope="col" class="text-left">{{ __('Difficulty') }}</th>
+			<th id="hScoreRev" scope="col" class="text-right">{{ __('Revision') }}</th>
+			<th id="hNDownloads" scope="col" class="text-right">{{ __('Downloads') }}</th>
+			<th id="hDownloadAction" scope="col" class="text-right"><center><i class="fa fa-cloud-download"></i></center></th>
+        </tr>
+        </thead>
+        <tbody>
+        
+    {% for map in mostDown %}
+        <tr>
+            <td headers="hLanguageMap" class="text-left">
+				{% if map.languageMap == "Spanish" %}
+					<img src="{{ zasset('@TdMMapsModule:images/espanol.gif') }}" width="30" height="16" alt="{{ map.languageMap|tdmmapsmodule_listEntry('map', 'languageMap') }}" title="{{ map.languageMap|tdmmapsmodule_listEntry('map', 'languageMap') }}" />
+				{% elseif map.languageMap == "English" %}
+					<img src="{{ zasset('@TdMMapsModule:images/ingles.gif') }}" width="30" height="16" alt="{{ map.languageMap|tdmmapsmodule_listEntry('map', 'languageMap') }}" title="{{ map.languageMap|tdmmapsmodule_listEntry('map', 'languageMap') }}" />
+				{% else %}
+					<img src="{{ zasset('@TdMMapsModule:images/otro.gif') }}" width="30" height="16" alt="{{ map.languageMap|tdmmapsmodule_listEntry('map', 'languageMap') }}" title="{{ map.languageMap|tdmmapsmodule_listEntry('map', 'languageMap') }}" />
+				{% endif %}
+			</td>
+			<td headers="hName" class="text-left">
+                <a href="{{ path('tdmmapsmodule_map_display', {'id': map.getId()}) }}" title="{{ __('View detail page')|e('html_attr') }}">{{ map.name|notifyFilters('tdmmapsmodule.filterhook.maps')|safeHtml }}</a>
+            </td>
+            <td headers="hAuthor" class="text-left">
+                {{ map.author }}
+            </td>
+            <td headers="hGame" class="text-left">
+                {{ map.game|tdmmapsmodule_listEntry('map', 'game') }}
+            </td>
+            <td headers="hSizeMap" class="text-left">
+                {{ map.sizeMap|tdmmapsmodule_listEntry('map', 'sizeMap') }}
+            </td>
+            <td headers="hHumJug" class="text-center">
+                {{ map.nHumans }}/{{ map.nPlayers }}
+            </td>
+            <td headers="hGameType" class="text-left">
+                {{ map.gameType|tdmmapsmodule_listEntry('map', 'gameType') }}
+            </td>
+			<td headers="hDifficulty" class="text-left">
+                {{ map.difficulty|tdmmapsmodule_listEntry('map', 'difficulty') }}
+            </td>
+			<td headers="hScoreRev" class="text-right">
+                {% if map.scoreRev == 0 %}
+					{{ map.scoreRev }}
+				{% else %}
+					{{ map.scoreRev / map.nScoreRev }}
+				{% endif %}
+            </td>
+			<td headers="hNDownloads" class="text-right">
+                {{ map.nDownloads }}
+            </td>
+			<td headers="hMapFile" class="text-left">
+                {% if map.mapFileMeta|default %}
+                <a href="{{ map.mapFileUrl }}" title="{{ map|tdmmapsmodule_formattedTitle|e('html_attr') }}"{% if map.mapFileMeta.isImage %} class="image-link"{% endif %}>
+                {% if map.mapFileMeta.isImage %}
+                    {% set thumbOptions = attribute(thumbRuntimeOptions, 'mapMapFile') %}
+                    <img src="{{ map.mapFile.getPathname()|imagine_filter('zkroot', thumbOptions) }}" alt="{{ map|tdmmapsmodule_formattedTitle|e('html_attr') }}" width="{{ thumbOptions.thumbnail.size[0] }}" height="{{ thumbOptions.thumbnail.size[1] }}" class="img-thumbnail" />
+                {% else %}
+                    <i class="fa fa-cloud-download"></i> ({{ map.mapFileMeta.size|tdmmapsmodule_fileSize(map.mapFile.getPathname(), false, false) }})
+                {% endif %}
+                </a>
+                {% endif %}
+            </td>
+        </tr>
+    {% else %}
+        <tr class="z-datatableempty">
+            <td class="text-left" colspan="23">
+        {{ __('No maps found.') }}
+            </td>
+        </tr>
+    {% endfor %}
+
+        </tbody>
+    </table>
+</div>

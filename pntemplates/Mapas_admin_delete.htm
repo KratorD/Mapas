@@ -1,0 +1,22 @@
+<!--[*  $Id: Mapas_admin_delete.htm 23981 2011-10-17 10:37:07Z Krator $  *]-->
+<!--[include file="Mapas_admin_menu.htm"]-->
+
+<div class="z-admincontainer">
+<div class="z-adminpageicon"><!--[pnimg modname=core src=editdelete.gif set=icons/large __alt="Map Administration"]--></div>
+<h2><!--[gt text="Delete map"]--></h2>
+<form class="z-adminform" action="<!--[pnmodurl modname="Mapas" type="admin" func="delete"]-->" method="post" enctype="application/x-www-form-urlencoded">
+<div>
+    <input type="hidden" name="authid" value="<!--[insert name="generateauthkey" module="Mapas"]-->" />
+    <input type="hidden" name="confirmation" value="1" />
+    <input type="hidden" name="mid" value="<!--[$mid|pnvarprepfordisplay]-->" />
+	<div class="z-adminformrow">
+		<p><!--[gt text="Do you want delete this record?"]--></p>
+		<p class="z-formnote z-informationmsg"><!--[gt text="Caution! This action will delete the file of the map."]--></p>
+	</div>
+    <div class="z-adminformrow z-adminformbuttons">
+    <!--[pnbutton src=button_ok.gif set=icons/small __alt="Confirm" __title="Confirm"]-->
+    <a href="<!--[pnmodurl modname="Mapas" type="admin" func="view"]-->"><!--[pnimg modname=core src=button_cancel.gif set=icons/small altml=true titleml=true __alt="Cancel" __title="Cancel"]--></a>
+    </div>
+</div>
+</form>
+</div>

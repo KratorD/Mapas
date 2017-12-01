@@ -1,0 +1,14 @@
+services:
+    # Entity factory
+    tdm_maps_module.entity_factory:
+        class: TdM\MapsModule\Entity\Factory\EntityFactory
+        arguments:
+            - "@doctrine.orm.default_entity_manager"
+            - "@tdm_maps_module.entity_initialiser"
+            - "@tdm_maps_module.collection_filter_helper"
+    
+    # Entity initialiser
+    tdm_maps_module.entity_initialiser:
+        class: TdM\MapsModule\Entity\Factory\EntityInitialiser
+        arguments:
+        - "@tdm_maps_module.listentries_helper"

@@ -1,0 +1,60 @@
+<!--[* $Id: Mapas_admin_main.htm 31 2011-10-17 20:55:41Z Krator $ *]-->
+<!--[include file="Mapas_admin_menu.htm"]-->
+<!--[pnpageaddvar name="javascript" value="modules/Mapas/pnjavascript/Mapas.js"]-->
+
+<div class="z-admincontainer">
+  <div class="z-adminpageicon"><!--[pnimg modname=core src=lists.gif set=icons/large __alt="Admin Maps" altml=true]--></div>
+  <h2><!--[gt text="Admin Maps"]--></h2>
+  <!--[if $est EQ 'SinComprobar']-->
+	<p align="center"><!--[gt text="List of maps non-validate"]--></p>
+  <!--[else]-->
+	<p align="center"><!--[gt text="List of maps validated"]--></p>
+  <!--[/if]-->
+  
+  <form name="frmFiltro" method="post" action="<!--[pnmodurl modname="Mapas" type="user" func="view"]-->">
+		<fieldset id="fiel"><legend><!--[gt text="Filter"]--></legend>
+			<div align="center"><!--[gt text="Show"]-->:
+				<select name="cmbFiltro" id="cmbFiltro" onChange="fltAdmin()">
+					<option <!--[if $est EQ 'SinComprobar']-->selected<!--[/if]--> value="SinComprobar"><!--[gt text='Not validate']--></option>
+					<option <!--[if $est EQ 'Comprobado']-->selected<!--[/if]--> value="Comprobado"><!--[gt text='Validate']--></option>
+				</select>
+			</div>			  
+		</fieldset>
+	</form>
+	
+<!--[* Listado mapas *]-->
+	<table class="z-admintable">
+		<tr>
+			<th><div align="center"><strong><!--[gt text='Map\'s name']--></strong></div></th>
+			<th><div align="center"><strong><!--[gt text="Game"]--></strong></div></th>			
+			<th><div align="center"><strong><!--[gt text="Upload D."]--></strong></div></th>
+			<th><div align="center"><strong><!--[gt text="Author"]--></strong></div></th>
+			<th><div align="center"><strong><!--[gt text="Upload by"]--></strong></div></th>
+			<th><div align="center"></div></th>
+			<th><div align="center"></div></th>
+			<th><div align="center"></div></th>
+		</tr>
+		<!--[foreach from=$mapas item=mapa name=conV ]-->
+			<tr>
+				<td><a href="<!--[$path]--><!--[$mapa.NombreFich]-->"><!--[ $mapa.NombreMapa|pnvarprepfordisplay ]--></td>
+				<td><!--[ $mapa.Juego|pnvarprepfordisplay ]--></td>				
+				<td><!--[ $mapa.FechaSubida|pndate_format ]--></td>
+				<td><!--[ $mapa.Autor|pnvarprepfordisplay ]--></td>
+				<td><!--[pnusergetvar name='uname' uid=$mapa.Usuario]--></td>
+				<td><div align="center">
+					<a href="<!--[pnmodurl modname="Mapas" type="admin" func="display" mid=$mapa.ID]-->">
+					<!--[pnimg modname=core src=14_layer_visible.gif set=icons/extrasmall __title="Display Map" altml=true]-->				
+				</div></td>
+				<td><div align="center">
+					<a href="<!--[pnmodurl modname="Mapas" type="admin" func="modify" mid=$mapa.ID]-->">
+					<!--[pnimg src=icon_edit.png width=16 height=16 __title="Edit Map"]--></a>
+				</div></td>
+				<td><div align="center">
+					<a href="<!--[pnmodurl modname="Mapas" type="admin" func="delete" mid=$mapa.ID]-->">
+					<!--[pnimg src=icon_delete.png width=16 height=16 __title="Delete Map"]-->
+				</div></td>
+			</tr>
+		<!--[/foreach]-->
+	</table>
+	
+</div>

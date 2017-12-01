@@ -1,0 +1,306 @@
+{# purpose of this template: maps list view #}
+{% extends routeArea == 'admin' ? 'TdMMapsModule::adminBase.html.twig' : 'TdMMapsModule::base.html.twig' %}
+{% block title own ? __('My maps') : __('Maps list') %}
+{% block admin_page_icon 'list-alt' %}
+{% block content %}
+<div class="tdmmapsmodule-map tdmmapsmodule-view">
+
+    {{ block('page_nav_links') }}
+
+    {{ include('@TdMMapsModule/Map/viewQuickNav.html.twig') }}{# see template file for available options #}
+
+    {% if routeArea == 'admin' %}
+    <form action="{{ path('tdmmapsmodule_map_' ~ routeArea ~ 'handleselectedentries') }}" method="post" id="mapsViewForm" class="form-horizontal" role="form">
+        <div>
+    {% endif %}
+        <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover table-condensed">
+            <colgroup>
+                {% if routeArea == 'admin' %}
+                    <col id="cSelect" />
+                {% endif %}
+                <col id="cItemActions" />
+                {% if routeArea == 'admin' %}
+                <col id="cWorkflowState" />
+                {% endif %}
+                <col id="cName" />
+                <col id="cAuthor" />
+                <col id="cMapFile" />
+                <col id="cTestState" />
+                <col id="cGame" />
+                <col id="cSizeMap" />
+                <col id="cBUnderground" />
+                <col id="cLanguageMap" />
+                <col id="cCreateDat" />
+                <col id="cVersionMap" />
+                <col id="cDifficulty" />
+                <col id="cNHumans" />
+                <col id="cNPlayers" />
+                <col id="cGameType" />
+                <col id="cMapStyle" />
+                <col id="cDescription" />
+                <col id="cForeground" />
+                <col id="cUnderground" />
+                <col id="cScoreRev" />
+                <col id="cNScoreRev" />
+                <col id="cNDownloads" />
+            </colgroup>
+            <thead>
+            <tr>
+                {% if routeArea == 'admin' %}
+                    <th id="hSelect" scope="col" class="{% if items|length > 0 %}fixed-column {% endif %}text-center z-w02">
+                        <input type="checkbox" class="tdmmaps-mass-toggle" />
+                    </th>
+                {% endif %}
+                <th id="hItemActions" scope="col" class="{% if items|length > 0 %}fixed-column {% endif %}unsorted z-w02">{{ __('Actions') }}</th>
+                {% if routeArea == 'admin' %}
+                <th id="hWorkflowState" scope="col" class="text-left">
+                    <a href="{{ sort.workflowState.url }}" title="{{ __f('Sort by %s', {'%s': 'state'}) }}" class="{{ sort.workflowState.class }}">{{ __('State') }}</a>
+                </th>
+                {% endif %}
+                <th id="hName" scope="col" class="text-left">
+                    <a href="{{ sort.name.url }}" title="{{ __f('Sort by %s', {'%s': 'name'}) }}" class="{{ sort.name.class }}">{{ __('Name') }}</a>
+                </th>
+                <th id="hAuthor" scope="col" class="text-left">
+                    <a href="{{ sort.author.url }}" title="{{ __f('Sort by %s', {'%s': 'author'}) }}" class="{{ sort.author.class }}">{{ __('Author') }}</a>
+                </th>
+                <th id="hMapFile" scope="col" class="text-left">
+                    <a href="{{ sort.mapFile.url }}" title="{{ __f('Sort by %s', {'%s': 'map file'}) }}" class="{{ sort.mapFile.class }}">{{ __('Map file') }}</a>
+                </th>
+                <th id="hTestState" scope="col" class="text-left">
+                    <a href="{{ sort.testState.url }}" title="{{ __f('Sort by %s', {'%s': 'test state'}) }}" class="{{ sort.testState.class }}">{{ __('Test state') }}</a>
+                </th>
+                <th id="hGame" scope="col" class="text-left">
+                    <a href="{{ sort.game.url }}" title="{{ __f('Sort by %s', {'%s': 'game'}) }}" class="{{ sort.game.class }}">{{ __('Game') }}</a>
+                </th>
+                <th id="hSizeMap" scope="col" class="text-left">
+                    <a href="{{ sort.sizeMap.url }}" title="{{ __f('Sort by %s', {'%s': 'size map'}) }}" class="{{ sort.sizeMap.class }}">{{ __('Size map') }}</a>
+                </th>
+                <th id="hBUnderground" scope="col" class="text-center">
+                    <a href="{{ sort.bUnderground.url }}" title="{{ __f('Sort by %s', {'%s': 'b underground'}) }}" class="{{ sort.bUnderground.class }}">{{ __('B underground') }}</a>
+                </th>
+                <th id="hLanguageMap" scope="col" class="text-left">
+                    <a href="{{ sort.languageMap.url }}" title="{{ __f('Sort by %s', {'%s': 'language map'}) }}" class="{{ sort.languageMap.class }}">{{ __('Language map') }}</a>
+                </th>
+                <th id="hCreateDat" scope="col" class="text-left">
+                    <a href="{{ sort.createDat.url }}" title="{{ __f('Sort by %s', {'%s': 'create dat'}) }}" class="{{ sort.createDat.class }}">{{ __('Create dat') }}</a>
+                </th>
+                <th id="hVersionMap" scope="col" class="text-left">
+                    <a href="{{ sort.versionMap.url }}" title="{{ __f('Sort by %s', {'%s': 'version map'}) }}" class="{{ sort.versionMap.class }}">{{ __('Version map') }}</a>
+                </th>
+                <th id="hDifficulty" scope="col" class="text-left">
+                    <a href="{{ sort.difficulty.url }}" title="{{ __f('Sort by %s', {'%s': 'difficulty'}) }}" class="{{ sort.difficulty.class }}">{{ __('Difficulty') }}</a>
+                </th>
+                <th id="hNHumans" scope="col" class="text-right">
+                    <a href="{{ sort.nHumans.url }}" title="{{ __f('Sort by %s', {'%s': 'n humans'}) }}" class="{{ sort.nHumans.class }}">{{ __('N humans') }}</a>
+                </th>
+                <th id="hNPlayers" scope="col" class="text-right">
+                    <a href="{{ sort.nPlayers.url }}" title="{{ __f('Sort by %s', {'%s': 'n players'}) }}" class="{{ sort.nPlayers.class }}">{{ __('N players') }}</a>
+                </th>
+                <th id="hGameType" scope="col" class="text-left">
+                    <a href="{{ sort.gameType.url }}" title="{{ __f('Sort by %s', {'%s': 'game type'}) }}" class="{{ sort.gameType.class }}">{{ __('Game type') }}</a>
+                </th>
+                <th id="hMapStyle" scope="col" class="text-left">
+                    <a href="{{ sort.mapStyle.url }}" title="{{ __f('Sort by %s', {'%s': 'map style'}) }}" class="{{ sort.mapStyle.class }}">{{ __('Map style') }}</a>
+                </th>
+                <th id="hDescription" scope="col" class="text-left">
+                    <a href="{{ sort.description.url }}" title="{{ __f('Sort by %s', {'%s': 'description'}) }}" class="{{ sort.description.class }}">{{ __('Description') }}</a>
+                </th>
+                <th id="hForeground" scope="col" class="text-left">
+                    <a href="{{ sort.foreground.url }}" title="{{ __f('Sort by %s', {'%s': 'foreground'}) }}" class="{{ sort.foreground.class }}">{{ __('Foreground') }}</a>
+                </th>
+                <th id="hUnderground" scope="col" class="text-left">
+                    <a href="{{ sort.underground.url }}" title="{{ __f('Sort by %s', {'%s': 'underground'}) }}" class="{{ sort.underground.class }}">{{ __('Underground') }}</a>
+                </th>
+                <th id="hScoreRev" scope="col" class="text-right">
+                    <a href="{{ sort.scoreRev.url }}" title="{{ __f('Sort by %s', {'%s': 'score rev'}) }}" class="{{ sort.scoreRev.class }}">{{ __('Score rev') }}</a>
+                </th>
+                <th id="hNScoreRev" scope="col" class="text-right">
+                    <a href="{{ sort.nScoreRev.url }}" title="{{ __f('Sort by %s', {'%s': 'n score rev'}) }}" class="{{ sort.nScoreRev.class }}">{{ __('N score rev') }}</a>
+                </th>
+                <th id="hNDownloads" scope="col" class="text-right">
+                    <a href="{{ sort.nDownloads.url }}" title="{{ __f('Sort by %s', {'%s': 'n downloads'}) }}" class="{{ sort.nDownloads.class }}">{{ __('N downloads') }}</a>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+        
+        {% for map in items %}
+            <tr>
+                {% if routeArea == 'admin' %}
+                    <td headers="hSelect" class="fixed-column text-center z-w02">
+                        <input type="checkbox" name="items[]" value="{{ map.getKey() }}" class="tdmmaps-toggle-checkbox" />
+                    </td>
+                {% endif %}
+                <td id="itemActions{{ map.getKey() }}" headers="hItemActions" class="fixed-column actions nowrap z-w02">
+                    {% set itemActions = knp_menu_get('TdMMapsModule:ItemActionsMenu:menu', [], {entity: map, area: routeArea, context: 'view'}) %}
+                    <div class="dropdown">
+                        <a id="itemActions{{ map.getKey() }}DropDownToggle" role="button" data-toggle="dropdown" data-target="#" href="javascript:void(0);" class="hidden dropdown-toggle"><i class="fa fa-tasks"></i> <span class="caret"></span></a>
+                        {{ knp_menu_render(itemActions, {template: 'ZikulaMenuModule:Override:actions.html.twig'}) }}
+                    </div>
+                </td>
+                {% if routeArea == 'admin' %}<td headers="hWorkflowState" class="text-left nowrap">
+                    {{ map.workflowState|tdmmapsmodule_objectState }}
+                </td>
+                {% endif %}<td headers="hName" class="text-left">
+                    <a href="{{ path('tdmmapsmodule_map_' ~ routeArea ~ 'display', {'id': map.getId()}) }}" title="{{ __('View detail page')|e('html_attr') }}">{{ map.name|notifyFilters('tdmmapsmodule.filterhook.maps')|safeHtml }}</a>
+                </td>
+                <td headers="hAuthor" class="text-left">
+                    {{ map.author }}
+                </td>
+                <td headers="hMapFile" class="text-left">
+                    {% if map.mapFileMeta|default %}
+                    <a href="{{ map.mapFileUrl }}" title="{{ map|tdmmapsmodule_formattedTitle|e('html_attr') }}"{% if map.mapFileMeta.isImage %} class="image-link"{% endif %}>
+                    {% if map.mapFileMeta.isImage %}
+                        {% set thumbOptions = attribute(thumbRuntimeOptions, 'mapMapFile') %}
+                        <img src="{{ map.mapFile.getPathname()|imagine_filter('zkroot', thumbOptions) }}" alt="{{ map|tdmmapsmodule_formattedTitle|e('html_attr') }}" width="{{ thumbOptions.thumbnail.size[0] }}" height="{{ thumbOptions.thumbnail.size[1] }}" class="img-thumbnail" />
+                    {% else %}
+                        {{ __('Download') }} ({{ map.mapFileMeta.size|tdmmapsmodule_fileSize(map.mapFile.getPathname(), false, false) }})
+                    {% endif %}
+                    </a>
+                    {% endif %}
+                </td>
+                <td headers="hTestState" class="text-left">
+                    {{ map.testState|tdmmapsmodule_listEntry('map', 'testState') }}
+                </td>
+                <td headers="hGame" class="text-left">
+                    {{ map.game|tdmmapsmodule_listEntry('map', 'game') }}
+                </td>
+                <td headers="hSizeMap" class="text-left">
+                    {{ map.sizeMap|tdmmapsmodule_listEntry('map', 'sizeMap') }}
+                </td>
+                <td headers="hBUnderground" class="text-center">
+                    {% if map.bUnderground %}
+                        <i class="fa fa-check" title="{{ __('Yes') }}"></i>
+                    {% else %}
+                        <i class="fa fa-times" title="{{ __('No') }}"></i>
+                    {% endif %}
+                </td>
+                <td headers="hLanguageMap" class="text-left">
+                    {{ map.languageMap|tdmmapsmodule_listEntry('map', 'languageMap') }}
+                </td>
+                <td headers="hCreateDat" class="text-left">
+                    {{ map.createDat|localizeddate('medium', 'none') }}
+                </td>
+                <td headers="hVersionMap" class="text-left">
+                    {{ map.versionMap }}
+                </td>
+                <td headers="hDifficulty" class="text-left">
+                    {{ map.difficulty|tdmmapsmodule_listEntry('map', 'difficulty') }}
+                </td>
+                <td headers="hNHumans" class="text-right">
+                    {{ map.nHumans }}
+                </td>
+                <td headers="hNPlayers" class="text-right">
+                    {{ map.nPlayers }}
+                </td>
+                <td headers="hGameType" class="text-left">
+                    {{ map.gameType|tdmmapsmodule_listEntry('map', 'gameType') }}
+                </td>
+                <td headers="hMapStyle" class="text-left">
+                    {{ map.mapStyle }}
+                </td>
+                <td headers="hDescription" class="text-left">
+                    {{ map.description|striptags|truncate(50) }}
+                </td>
+                <td headers="hForeground" class="text-left">
+                    {% if map.foreground is not empty and map.foregroundMeta|default %}
+                                <a href="{{ map.foregroundUrl }}" title="{{ map|tdmmapsmodule_formattedTitle|e('html_attr') }}"{% if map.foregroundMeta.isImage %} class="image-link"{% endif %}>
+                    {% if map.foregroundMeta.isImage %}
+                        {% set thumbOptions = attribute(thumbRuntimeOptions, 'mapForeground') %}
+                        <img src="{{ map.foreground.getPathname()|imagine_filter('zkroot', thumbOptions) }}" alt="{{ map|tdmmapsmodule_formattedTitle|e('html_attr') }}" width="{{ thumbOptions.thumbnail.size[0] }}" height="{{ thumbOptions.thumbnail.size[1] }}" class="img-thumbnail" />
+                    {% else %}
+                        {{ __('Download') }} ({{ map.foregroundMeta.size|tdmmapsmodule_fileSize(map.foreground.getPathname(), false, false) }})
+                    {% endif %}
+                    </a>
+                    {% else %}&nbsp;{% endif %}
+                </td>
+                <td headers="hUnderground" class="text-left">
+                    {% if map.underground is not empty and map.undergroundMeta|default %}
+                                <a href="{{ map.undergroundUrl }}" title="{{ map|tdmmapsmodule_formattedTitle|e('html_attr') }}"{% if map.undergroundMeta.isImage %} class="image-link"{% endif %}>
+                    {% if map.undergroundMeta.isImage %}
+                        {% set thumbOptions = attribute(thumbRuntimeOptions, 'mapUnderground') %}
+                        <img src="{{ map.underground.getPathname()|imagine_filter('zkroot', thumbOptions) }}" alt="{{ map|tdmmapsmodule_formattedTitle|e('html_attr') }}" width="{{ thumbOptions.thumbnail.size[0] }}" height="{{ thumbOptions.thumbnail.size[1] }}" class="img-thumbnail" />
+                    {% else %}
+                        {{ __('Download') }} ({{ map.undergroundMeta.size|tdmmapsmodule_fileSize(map.underground.getPathname(), false, false) }})
+                    {% endif %}
+                    </a>
+                    {% else %}&nbsp;{% endif %}
+                </td>
+                <td headers="hScoreRev" class="text-right">
+                    {{ map.scoreRev }}
+                </td>
+                <td headers="hNScoreRev" class="text-right">
+                    {{ map.nScoreRev }}
+                </td>
+                <td headers="hNDownloads" class="text-right">
+                    {{ map.nDownloads }}
+                </td>
+            </tr>
+        {% else %}
+            <tr class="z-{{ routeArea == 'admin' ? 'admin' : 'data' }}tableempty">
+                <td class="text-left" colspan="{% if routeArea == 'admin' %}24{% else %}23{% endif %}">
+            {{ __('No maps found.') }}
+              </td>
+            </tr>
+        {% endfor %}
+        
+            </tbody>
+        </table>
+        </div>
+        
+        {% if all != 1 and pager|default %}
+            {{ pager({rowcount: pager.amountOfItems, limit: pager.itemsPerPage, display: 'page', route: 'tdmmapsmodule_map_' ~ routeArea ~ 'view'}) }}
+        {% endif %}
+    {% if routeArea == 'admin' %}
+            <fieldset>
+                <label for="tdMMapsModuleAction" class="col-sm-3 control-label">{{ __('With selected maps') }}</label>
+                <div class="col-sm-6">
+                    <select id="tdMMapsModuleAction" name="action" class="form-control input-sm">
+                        <option value="">{{ __('Choose action') }}</option>
+                        <option value="approve" title="{{ __('Update content and approve for immediate publishing.') }}">{{ __('Approve') }}</option>
+                        <option value="delete" title="{{ __('Delete content permanently.') }}">{{ __('Delete') }}</option>
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <input type="submit" value="{{ __('Submit') }}" class="btn btn-default btn-sm" />
+                </div>
+            </fieldset>
+        </div>
+    </form>
+    {% endif %}
+
+    {{ block('display_hooks') }}
+</div>
+{% endblock %}
+{% block page_nav_links %}
+    <p>
+        {% if canBeCreated %}
+            {% if hasPermission('TdMMapsModule:Map:', '::', 'ACCESS_COMMENT') %}
+                {% set createTitle = __('Create map') %}
+                <a href="{{ path('tdmmapsmodule_map_' ~ routeArea ~ 'edit') }}" title="{{ createTitle|e('html_attr') }}"><i class="fa fa-plus"></i> {{ createTitle }}</a>
+            {% endif %}
+        {% endif %}
+        {% if all == 1 %}
+            {% set linkTitle = __('Back to paginated view') %}
+            {% set routeArgs = own ? {own: 1} : {} %}
+            <a href="{{ path('tdmmapsmodule_map_' ~ routeArea ~ 'view', routeArgs) }}" title="{{ linkTitle|e('html_attr') }}"><i class="fa fa-table"></i> {{ linkTitle }}</a>
+        {% else %}
+            {% set linkTitle = __('Show all entries') %}
+            {% set routeArgs = own ? {all: 1, own: 1} : {all: 1} %}
+            <a href="{{ path('tdmmapsmodule_map_' ~ routeArea ~ 'view', routeArgs) }}" title="{{ linkTitle|e('html_attr') }}"><i class="fa fa-table"></i> {{ linkTitle }}</a>
+        {% endif %}
+    </p>
+{% endblock %}
+{% block display_hooks %}
+    
+    {# here you can activate calling display hooks for the view page if you need it #}
+    {# % if routeArea != 'admin' %}
+        {% set hooks = notifyDisplayHooks(eventName='tdmmapsmodule.ui_hooks.maps.display_view', urlObject=currentUrlObject, outputAsArray=true) %}
+        {% if hooks is iterable and hooks|length > 0 %}
+            {% for area, hook in hooks %}
+                <div class="z-displayhook" data-area="{{ area|e('html_attr') }}">{{ hook|raw }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endif % #}
+{% endblock %}

@@ -1,0 +1,51 @@
+<!--[*  $Id: Mapas_admin_modifyconfig.htm 23981 2011-10-17 10:37:07Z markwest $  *]-->
+<!--[include file="Mapas_admin_menu.htm"]-->
+
+<h2><!--[gt text="Modify configuration"]--></h2>
+
+<form name="fichaMapa" method="post" action="<!--[pnmodurl modname="Mapas" type="admin" func="updateconfig"]-->">
+<fieldset>
+    <legend><!--[gt text="Module settings"]--></legend>
+	
+	<div class="z-formrow">
+		<strong><!--[gt text="Path"]--></strong>&nbsp;<input name="txtPath" type="text" id="txtPath" size="50" value="<!--[$path]-->">
+		<p class="z-formnote z-informationmsg"><!--[gt text="Directory where the images are saved. Use the character / for separate directories"]--></p>
+	</div>
+	
+	<div class="z-formrow">
+		<strong><!--[gt text="Games"]--></strong>&nbsp;<input name="txtJuegos" type="text" id="txtJuegos" size="50" value="<!--[$juegos]-->">
+		<p class="z-formnote z-informationmsg"><!--[gt text="Use the character / for separate the values"]--></p>
+	</div>
+	
+	<div class="z-formrow">
+		<strong><!--[gt text="Sizes"]--></strong>&nbsp;<input name="txtTamanos" type="text" id="txtTamanos" size="100" value="<!--[$tamanos]-->">
+		<p class="z-formnote z-informationmsg"><!--[gt text="Use the character / for separate the values"]--></p>
+	</div>
+	
+	<div class="z-formrow">
+		<strong><!--[gt text="Dificulties"]--></strong>&nbsp;<input name="txtDificultades" type="text" id="txtDificultades" size="100" value="<!--[$dificultades]-->">
+		<p class="z-formnote z-informationmsg"><!--[gt text="Use the character / for separate the values"]--></p>
+	</div>
+	
+	<div class="z-formrow">
+		<strong><!--[gt text="Games Types"]--></strong>&nbsp;<input name="txtTipoJuegos" type="text" id="txtTipoJuegos" size="100" value="<!--[$tipoJuegos]-->">
+		<p class="z-formnote z-informationmsg"><!--[gt text="Use the character / for separate the values"]--></p>
+	</div>
+	
+	<div class="z-formrow">
+		<strong><!--[gt text="Allowed Extensions"]--></strong>&nbsp;<input name="txtallowedExtensions" type="text" id="txtallowedExtensions" size="100" value="<!--[$allowedExtensions]-->">
+		<p class="z-formnote z-informationmsg"><!--[gt text="Use the character / for separate the values"]--></p>
+	</div>
+	
+	<div class="z-formrow">
+		<strong><!--[gt text="Max Size for files of maps"]--></strong>&nbsp;<input name="txtfilesMaxSize" type="text" id="txtfilesMaxSize" size="100" value="<!--[$filesMaxSize]-->">
+		<p class="z-formnote z-informationmsg"><!--[gt text="Size in bytes"]--></p>
+	</div>
+	
+</fieldset>
+
+<div class="z-formbuttons">
+	<input type="submit" name="Submit" value="<!--[gt text="Submit"]-->">
+</div>
+
+</form>
