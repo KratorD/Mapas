@@ -1,0 +1,110 @@
+services:
+    # Helper services
+    tdm_maps_module.collection_filter_helper:
+        class: TdM\MapsModule\Helper\CollectionFilterHelper
+        arguments:
+            - "@request_stack"
+            - "@zikula_users_module.current_user"
+            - "@=service('zikula_extensions_module.api.variable').get('TdMMapsModule', 'showOnlyOwnEntries', false)"
+    
+    tdm_maps_module.controller_helper:
+        class: TdM\MapsModule\Helper\ControllerHelper
+        arguments:
+            - "@translator.default"
+            - "@request_stack"
+            - "@form.factory"
+            - "@zikula_extensions_module.api.variable"
+            - "@tdm_maps_module.entity_factory"
+            - "@tdm_maps_module.collection_filter_helper"
+            - "@tdm_maps_module.model_helper"
+            - "@tdm_maps_module.image_helper"
+    
+    tdm_maps_module.entity_display_helper:
+        class: TdM\MapsModule\Helper\EntityDisplayHelper
+        arguments:
+            - "@translator.default"
+            - "@request_stack"
+            - "@tdm_maps_module.listentries_helper"
+    
+    tdm_maps_module.hook_helper:
+        class: TdM\MapsModule\Helper\HookHelper
+        arguments:
+            - "@hook_dispatcher"
+    
+    tdm_maps_module.image_helper:
+        class: TdM\MapsModule\Helper\ImageHelper
+        arguments:
+            - "@translator.default"
+            - "@session"
+            - "@zikula_extensions_module.api.variable"
+    
+    tdm_maps_module.listentries_helper:
+        class: TdM\MapsModule\Helper\ListEntriesHelper
+        arguments:
+            - "@translator.default"
+    
+    tdm_maps_module.model_helper:
+        class: TdM\MapsModule\Helper\ModelHelper
+        arguments:
+            - "@tdm_maps_module.entity_factory"
+    
+    tdm_maps_module.notification_helper:
+        class: TdM\MapsModule\Helper\NotificationHelper
+        arguments:
+            - "@kernel"
+            - "@translator.default"
+            - "@session"
+            - "@router"
+            - "@request_stack"
+            - "@zikula_extensions_module.api.variable"
+            - "@twig"
+            - "@zikula_mailer_module.api.mailer"
+            - "@zikula_groups_module.group_repository"
+            - "@tdm_maps_module.entity_display_helper"
+            - "@tdm_maps_module.workflow_helper"
+    
+    tdm_maps_module.search_helper:
+        class: TdM\MapsModule\Helper\SearchHelper
+        arguments:
+            - "@translator.default"
+            - "@zikula_permissions_module.api.permission"
+            - "@session"
+            - "@request_stack"
+            - "@tdm_maps_module.entity_factory"
+            - "@tdm_maps_module.controller_helper"
+            - "@tdm_maps_module.entity_display_helper"
+        tags:
+            - { name: zikula.searchable_module, bundleName: TdMMapsModule }
+    
+    tdm_maps_module.upload_helper:
+        class: TdM\MapsModule\Helper\UploadHelper
+        arguments:
+            - "@translator.default"
+            - "@filesystem"
+            - "@session"
+            - "@logger"
+            - "@zikula_users_module.current_user"
+            - "@=service('zikula_extensions_module.api.variable').getAll('TdMMapsModule')"
+            - "%datadir%"
+    
+    tdm_maps_module.view_helper:
+        class: TdM\MapsModule\Helper\ViewHelper
+        arguments:
+            - "@twig"
+            - "@twig.loader"
+            - "@request_stack"
+            - "@zikula_permissions_module.api.permission"
+            - "@zikula_extensions_module.api.variable"
+            - "@zikula_core.common.theme.pagevars"
+            - "@tdm_maps_module.controller_helper"
+    
+    tdm_maps_module.workflow_helper:
+        class: TdM\MapsModule\Helper\WorkflowHelper
+        arguments:
+            - "@translator.default"
+            - "@workflow.registry"
+            - "@logger"
+            - "@zikula_permissions_module.api.permission"
+            - "@zikula_users_module.current_user"
+            - "@tdm_maps_module.entity_factory"
+            - "@tdm_maps_module.listentries_helper"

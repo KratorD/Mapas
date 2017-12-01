@@ -1,0 +1,5 @@
+tdmmapsmodule:
+    # define routing support for these controllers
+    resource: "@TdMMapsModule/Controller"
+    # enable support for defining routes by annotations
+    type: annotation

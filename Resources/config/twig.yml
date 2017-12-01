@@ -1,0 +1,12 @@
+services:
+    # Twig extension
+    tdm_maps_module.twig_extension:
+        class: TdM\MapsModule\Twig\TwigExtension
+        arguments:
+            - "@translator.default"
+            - "@zikula_extensions_module.api.variable"
+            - "@tdm_maps_module.entity_display_helper"
+            - "@tdm_maps_module.workflow_helper"
+            - "@tdm_maps_module.listentries_helper"
+        public: false
+        tags: ['twig.extension']
