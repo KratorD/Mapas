@@ -1,9 +1,0 @@
-services:
-    # Custom validators
-    tdm_maps_module.validator.list_entry.validator:
-        class: TdM\MapsModule\Validator\Constraints\ListEntryValidator
-        arguments:
-            - "@translator.default"
-            - "@tdm_maps_module.listentries_helper"
-        tags:
-            - { name: validator.constraint_validator, alias: tdm_maps_module.validator.list_entry.validator }
