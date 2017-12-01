@@ -1,0 +1,169 @@
+{# purpose of this template: build the form to edit an instance of map #}
+{% set baseTemplate = app.request.query.getBoolean('raw', false) ? 'raw' : (routeArea == 'admin' ? 'adminBase' : 'base') %}
+{% extends 'TdMMapsModule::' ~ baseTemplate ~ '.html.twig' %}
+
+{% block header %}
+    {{ parent() }}
+    {{ pageAddAsset('javascript', zasset('@TdMMapsModule:js/TdMMapsModule.Validation.js'), 98) }}
+    {{ pageAddAsset('javascript', zasset('@TdMMapsModule:js/TdMMapsModule.EditFunctions.js'), 99) }}
+{% endblock %}
+{% block title mode == 'create' ? __('Create map') : __('Edit map') %}
+{% block admin_page_icon mode == 'create' ? 'plus' : 'pencil-square-o' %}
+{% block content %}
+    <div class="tdmmapsmodule-map tdmmapsmodule-edit">
+        {% form_theme form with [
+            '@TdMMapsModule/Form/bootstrap_3.html.twig',
+            'ZikulaFormExtensionBundle:Form:form_div_layout.html.twig'
+        ] %}
+        {{ form_start(form, {attr: {id: 'mapEditForm', class: 'tdmmaps-edit-form'}}) }}
+        {{ form_errors(form) }}
+        <fieldset>
+            <legend>{{ __('Content') }}</legend>
+            {{ form_row(form.name) }}
+            {{ form_row(form.author) }}
+            {{ form_row(form.mapFile) }}
+            {{ form_row(form.testState) }}
+            {{ form_row(form.game) }}
+            {{ form_row(form.sizeMap) }}
+            {{ form_row(form.bUnderground) }}
+            {{ form_row(form.languageMap) }}
+            {{ form_row(form.createDat) }}
+            {{ form_row(form.versionMap) }}
+            {{ form_row(form.difficulty) }}
+            {{ form_row(form.nHumans) }}
+            {{ form_row(form.nPlayers) }}
+            {{ form_row(form.gameType) }}
+            {{ form_row(form.mapStyle) }}
+			<legend>{{ __('Map Style') }}:&nbsp;</legend>
+				<table width="100%" border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<td><label><input type="checkbox" name="EstiloMapa[Clasico]">{{ __('Classic') }}</label></td>
+						<td><label><input type="checkbox" name="EstiloMapa[GrandesEjercitos]">{{ __('Big armies') }}</label></td>
+						<td><label><input type="checkbox" name="EstiloMapa[EscasoRecurso]">{{ __('With little resources') }}</label></td>
+						<td><label><input type="checkbox" name="EstiloMapa[MuchasCiudades]">{{ __('With many castles') }}</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="checkbox" name="EstiloMapa[Historia]">{{ __('History') }}</label></td>
+						<td><label><input type="checkbox" name="EstiloMapa[PequenosEjercitos]">{{ __('Small armies') }}</label></td>
+						<td><label><input type="checkbox" name="EstiloMapa[RicoRecursos]">{{ __('With many resources') }}</label></td>
+						<td><label><input type="checkbox" name="EstiloMapa[AtestadoFuertes]">{{ __('With many forts') }}</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="checkbox" name="EstiloMapa[Exploracion]">{{ __('Exploration') }}</label></td>
+						<td><label><input type="checkbox" name="EstiloMapa[InicioRapido]">{{ __('Quick Init') }}</label></td>
+						<td><label><input type="checkbox" name="EstiloMapa[Equilibrado]">{{ __('Balanced for multiplayer') }}</label></td>
+						<td><label><input type="checkbox" name="EstiloMapa[ControlArea]">{{ __('Without control areas') }}</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="checkbox" name="EstiloMapa[Busquedas]">{{ __('Quest') }}</label></td>
+						<td><label></label></td>
+						<td><label></label></td>
+						<td><label><input type="checkbox" name="EstiloMapa[LimTiempo]">{{ __('Time limit') }}</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="checkbox" name="EstiloMapa[Campania]">{{ __('Campaign') }}</label></label></td>
+						<td><label></label></td>
+						<td><label></label></td>
+						<td><label><input type="checkbox" name="EstiloMapa[NeutralesFuertes]">{{ __('Might neutrals') }}</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="checkbox" name="EstiloMapa[Torneo]">{{ __('Tournament') }}</label></label></td>
+						<td><label></label></td>
+						<td><label></label></td>
+						<td><label><input type="checkbox" name="EstiloMapa[GuarBarreras]">{{ __('Borders') }}</label></td>
+					</tr>
+					<tr>
+						<td><label></label></label></td>
+						<td><label></label></td>
+						<td><label></label></td>
+						<td><label><input type="checkbox" name="EstiloMapa[Navegacion]">{{ __('Navegation') }}</label></td>
+					</tr>
+				</table>
+            {{ form_row(form.description) }}
+            {{ form_row(form.foreground) }}
+            {{ form_row(form.underground) }}
+			<div class="hidden">
+				{{ form_row(form.scoreRev) }}
+				{{ form_row(form.nScoreRev) }}
+				{{ form_row(form.nDownloads) }}
+			</div>
+        </fieldset>
+        
+        {% if mode != 'create' %}
+            {{ include('@TdMMapsModule/Helper/includeStandardFieldsEdit.html.twig', {obj: map}) }}
+        {% endif %}
+        
+        {% if formHookTemplates|length > 0 %}
+            <fieldset>
+                {% for hookTemplate in formHookTemplates %}
+                    {{ include(hookTemplate.0, hookTemplate.1, ignore_missing = true) }}
+                {% endfor %}
+            </fieldset>
+        {% endif %}
+        
+        <fieldset>
+            <legend>{{ __('Communication') }}</legend>
+            {{ form_row(form.additionalNotificationRemarks) }}
+        </fieldset>
+        
+        {% if form.moderationSpecificCreator is defined %}
+            <fieldset id="moderationFieldsSection">
+                <legend>{{ __('Moderation') }} <i class="fa fa-expand"></i></legend>
+                <div id="moderationFieldsContent">
+                    {{ form_row(form.moderationSpecificCreator) }}
+                    {{ form_row(form.moderationSpecificCreationDate) }}
+                </div>
+            </fieldset>
+        {% endif %}
+        
+        
+        {# include possible submit actions #}
+        <div class="form-group form-buttons">
+            <div class="col-sm-offset-3 col-sm-9">
+                {% for action in actions %}
+                    {{ form_widget(attribute(form, action.id)) }}
+                    {% if mode == 'create' and action.id == 'submit' and form.submitrepeat is defined %}
+                        {{ form_widget(attribute(form, 'submitrepeat')) }}
+                    {% endif %}
+                {% endfor %}
+                {{ form_widget(form.reset) }}
+                {{ form_widget(form.cancel) }}
+            </div>
+        </div>
+        {{ form_end(form) }}
+		{#{ form_end(form, {'render_rest': false}) }#}
+		{#{ form_widget(form._token) }#}
+        {% set hookId = mode != 'create' ? map.id : null %}
+        {% set hooks = notifyDisplayHooks(eventName='tdmmapsmodule.ui_hooks.maps.form_edit', id=hookId, outputAsArray=true) %}
+        {% if hooks is iterable and hooks|length > 0 %}
+            {% for area, hook in hooks %}
+                <div class="z-displayhook" data-area="{{ area|e('html_attr') }}">{{ hook|raw }}</div>
+            {% endfor %}
+        {% endif %}
+        
+    </div>
+{% endblock %}
+{% block footer %}
+    {{ parent() }}
+    {% set formInitScript %}
+        <script type="text/javascript">
+        /* <![CDATA[ */
+            
+            ( function($) {
+                $(document).ready(function() {
+                    // initialise auto completion for user fields
+                    {% if form.moderationSpecificCreator is defined %}
+                        initUserLiveSearch('tdmmapsmodule_map_moderationSpecificCreator');
+                    {% endif %}
+                    tdMMapsInitEditForm('{{ mode }}', '{% if mode != 'create' %}{{ map.id }}{% endif %}');
+                    tdMMapsInitUploadField('tdmmapsmodule_map_mapFile_mapFile');
+                    tdMMapsInitDateField('tdmmapsmodule_map_createDat');
+                    tdMMapsInitUploadField('tdmmapsmodule_map_foreground_foreground');
+                    tdMMapsInitUploadField('tdmmapsmodule_map_underground_underground');
+                });
+            })(jQuery);
+        /* ]]> */
+        </script>
+    {% endset %}
+    {{ pageAddAsset('footer', formInitScript) }}
+{% endblock %}
