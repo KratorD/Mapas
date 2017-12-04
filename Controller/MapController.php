@@ -316,4 +316,80 @@ class MapController extends AbstractMapController
     }
 
     // feel free to add your own controller methods here
+	
+	
+	/**
+     * @inheritDoc
+     *
+     * @Route("/admin/map/score/{id}.{_format}",
+     *        requirements = {"id" = "\d+", "_format" = "html"},
+     *        defaults = {"_format" = "html"},
+     *        methods = {"GET"}
+     * )
+     * @ParamConverter("map", class="TdMMapsModule:MapEntity", options = {"repository_method" = "selectById", "mapping": {"id": "id"}, "map_method_signature" = true})
+     *
+     * @param Request $request Current request instance
+     * @param MapEntity $map Treated map instance
+     *
+     * @return Response Output
+     *
+     * @throws AccessDeniedException Thrown if the user doesn't have required permissions
+     * @throws NotFoundHttpException Thrown by param converter if map to be displayed isn't found
+     */
+	public function scoreAction(Request $request, MapEntity $map)
+	{
+		// parameter specifying which type of objects we are treating
+        $objectType = 'map';
+        $permLevel = ACCESS_ADMIN;
+        if (!$this->hasPermission('TdMMapsModule:' . ucfirst($objectType) . ':', '::', $permLevel)) {
+            throw new AccessDeniedException();
+        }
+        // create identifier for permission check
+        $instanceId = $map->getKey();
+        if (!$this->hasPermission('TdMMapsModule:' . ucfirst($objectType) . ':', $instanceId . '::', $permLevel)) {
+            throw new AccessDeniedException();
+        }
+        
+        if ($map->getWorkflowState() != 'approved' && !$this->hasPermission('TdMMapsModule:' . ucfirst($objectType) . ':', $instanceId . '::', ACCESS_ADMIN)) {
+            throw new AccessDeniedException();
+        }
+        
+        //Get form data
+		$confirmation = $request->query->get('confirmation');
+		$score = $request->query->get('Score');
+		 
+		// Check for confirmation.
+		if (empty($confirmation)) {
+			//Render Page
+            return $this->render('TdMMapsModule:Custom:score.html.twig', [
+				'mid' => $instanceId
+			]);
+		}
+        //dump() sirve para ver una entidad
+        // Confirm authorisation code
+		/*if (!SecurityUtil::confirmAuthKey()) {
+			return LogUtil::registerAuthidError (ModUtil::url('Maps', 'admin', 'view'));
+		}*/
+		
+		// Scores
+		$newScore = $map->getScoreRev() + $score;
+		$map->setScoreRev($newScore);
+		$newNScore = $map->getNScoreRev() + 1;
+		$map->setNScoreRev($newNScore);
+
+		//Get Entity Manager
+		$em = $this->getDoctrine()->getManager();
+		
+		try {
+			$em->persist($map);
+            $em->flush();
+			$this->addFlash('status', $this->__('Map scored sucessfully.'));
+            return $this->redirectToRoute('tdmmapsmodule_map_adminindex');
+		} catch (Zikula_Exception $e) {
+            echo "<pre>";
+            var_dump($e->getDebug());
+            echo "</pre>";
+            die;
+        }
+	}
 }
