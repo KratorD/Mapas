@@ -1,0 +1,27 @@
+{{ adminHeader() }}
+
+<div class="z-admincontainer">
+
+<h2>{{ __('Score Map') }}</h2>
+<form class="z-adminform" action="{{ path('tdmmapsmodule_map_score', {'id': mid }) }}">
+<div>
+    <input type="hidden" name="authid" value="{insert name="generateauthkey" module="Maps"}" />
+    <input type="hidden" name="confirmation" value="1" />
+    <input type="hidden" name="mid" value="{{mid}}" />
+	<div class="z-adminformrow">
+		<p>
+			{{ __('Score') }}:&nbsp;<select name="Score" size="1">
+			{% for i in 0..10 %}
+				<option value="{{ i }}">{{ i }}</option>
+			{% endfor %}
+			</select>
+		</p>
+	</div>
+    <div class="z-adminformrow z-adminformbuttons">
+		<button type="submit" id="tdmmapsmodule_map_score" name="tdmmapsmodule_map[save]" class="btn btn-success btn"><i class="fa fa-check"></i>{{ __('Submit') }}</button>
+        {# <a href="{{ path('tdmmapsmodule_map_adminindex', {'id': mid }) }}"><button type="submit" id="tdmmapsmodule_map_index" name="tdmmapsmodule_map[cancel]" class="btn btn-default btn"><i class="fa fa-times"></i> Cancel</button></a> #}
+	</div>
+</div>
+</form>
+</div>
+{{adminFooter() }}
