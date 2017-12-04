@@ -52,6 +52,5 @@ services:
         class: TdM\MapsModule\Form\Type\ConfigType
         arguments:
             - "@translator.default"
-            - "@=service('zikula_extensions_module.api.variable').getAll('TdMMapsModule')"
-            - "@zikula_groups_module.group_repository"
+            - "@tdm_maps_module.listentries_helper"
         tags: ['form.type']

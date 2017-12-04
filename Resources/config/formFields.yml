@@ -1,6 +1,12 @@
 services:
     # Form field types
     
+    tdm_maps_module.form.type.field.multilist:
+        class: TdM\MapsModule\Form\Type\Field\MultiListType
+        arguments:
+            - "@tdm_maps_module.listentries_helper"
+        tags: ['form.type']
+    
     tdm_maps_module.form.type.field.upload:
         class: TdM\MapsModule\Form\Type\Field\UploadType
         arguments:

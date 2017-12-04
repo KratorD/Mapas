@@ -3,7 +3,7 @@ application "Maps" {
     author "Krator"
     email "torredemarfil@heroesofmightandmagic.es"
     url "https://www.heroesofmightandmagic.es"
-    version "2.0.0"
+    version "1.0.0"
     prefix "maps"
     generatorSettings {
         settingsContainer "Settings"
@@ -19,6 +19,7 @@ application "Maps" {
         generateKmlTemplates false
         generateIcsTemplates false
         generateTests false
+    skipFiles "MapController.php,EditHandler.php\r\n"
     }
     entities {
         entity "map" leading {
@@ -64,11 +65,11 @@ application "Maps" {
                 list "sizeMap" {
                     length 15
                     items {
-                        listItem "Tiny" ( "Pequeño" ),
+                        listItem "Tiny" ( "Peque�o" ),
                         listItem "Medium" ( "Mediano" ),
                         listItem "Big" ( "Grande" ),
                         listItem "Huge" ( "Extragrande" ),
-                        listItem "Campaign" ( "Campaña" )
+                        listItem "Campaign" ( "Campa�a" )
                     }
                 },
                 boolean "bUnderground" {
@@ -77,14 +78,15 @@ application "Maps" {
                 list "languageMap" {
                     length 8
                     items {
-                        listItem "English" ( "Inglés" ),
-                        listItem "Spanish" ( "Español" ),
+                        listItem "English" ( "Ingl�s" ),
+                        listItem "Spanish" ( "Espa�ol" ),
                         listItem "Otro" ( "Otro" )
                     }
                 },
-                date "createDat" {
+                datetime "createDat" {
                     mandatory false
-                },
+                components DATE
+                }, 
                 string "versionMap" {
                     mandatory false
                     length 5
@@ -127,9 +129,29 @@ application "Maps" {
                         listItem  "Multiplayer allied vs CPU" ( "MultiplayerAllVsCPU" )
                     }
                 },
-                string "mapStyle" {
-                    mandatory false
+                list "mapStyle" multiple expanded {
                     length 235
+                items {
+                        listItem  "Classic" ( "Classic" ),
+                        listItem  "Big armies" ( "Big armies" ),
+                        listItem "With little resources" ( "With little resources" ),
+                        listItem "With many castles" ( "With many castles" ),
+                        listItem "History" ( "History" ),
+                        listItem "Small armies" ( "Small armies" ),
+                        listItem "With many resources" ( "With many resources" ),
+                        listItem "With many forts" ( "With many forts" ),
+                        listItem "Exploration" ( "Exploration" ),
+                        listItem "Quick Init" ( "Quick Init" ),
+                        listItem "Balanced for multiplayer" ( "Balanced for multiplayer" ),
+                        listItem "Without control areas" ( "Without control areas" ),
+                        listItem "Quest" ( "Quest" ),
+                        listItem "Time limit" ( "Time limit" ),
+                        listItem "Campaign" ( "Campaign" ),
+                        listItem "Might neutrals" ( "Might neutrals" ),
+                        listItem "Tournament" ( "Tournament" ),
+                        listItem "Borders" ( "Borders" ),
+                        listItem "Navegation" ( "Navegation" )
+                    }
                 },
                 text "description" {
                     mandatory false
@@ -143,22 +165,24 @@ application "Maps" {
                 integer "scoreRev" {
                     defaultValue "0"
                     mandatory false
+                visible false
                 },
                 integer "nScoreRev" {
                     defaultValue "0"
                     mandatory false
+                visible false
                 },
                 integer "nDownloads" {
                     defaultValue "0"
                     mandatory false
+                visible false
                 }
             }
             actions {
                 mainAction "Index",
                 viewAction "View",
                 displayAction "Display",
-                editAction "Edit"
-            ,
+                editAction "Edit",
                 deleteAction "Delete"
             }
         }

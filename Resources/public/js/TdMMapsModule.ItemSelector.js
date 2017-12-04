@@ -7,8 +7,7 @@ tdMMapsModule.itemSelector.items = {};
 tdMMapsModule.itemSelector.baseId = 0;
 tdMMapsModule.itemSelector.selectedId = 0;
 
-tdMMapsModule.itemSelector.onLoad = function (baseId, selectedId)
-{
+tdMMapsModule.itemSelector.onLoad = function (baseId, selectedId) {
     tdMMapsModule.itemSelector.baseId = baseId;
     tdMMapsModule.itemSelector.selectedId = selectedId;
 
@@ -26,15 +25,13 @@ tdMMapsModule.itemSelector.onLoad = function (baseId, selectedId)
     tdMMapsModule.itemSelector.getItemList();
 };
 
-tdMMapsModule.itemSelector.onParamChanged = function ()
-{
+tdMMapsModule.itemSelector.onParamChanged = function () {
     jQuery('#ajaxIndicator').removeClass('hidden');
 
     tdMMapsModule.itemSelector.getItemList();
 };
 
-tdMMapsModule.itemSelector.getItemList = function ()
-{
+tdMMapsModule.itemSelector.getItemList = function () {
     var baseId;
     var params;
 
@@ -51,7 +48,7 @@ tdMMapsModule.itemSelector.getItemList = function ()
         params[catidsMain] = jQuery('#' + baseId + '_catidsMain').val();
     }
 
-    jQuery.getJSON(Routing.generate('tdmmapsmodule_ajax_getitemlistfinder'), params, function( data ) {
+    jQuery.getJSON(Routing.generate('tdmmapsmodule_ajax_getitemlistfinder'), params, function (data) {
         var baseId;
 
         baseId = tdMMapsModule.itemSelector.baseId;
@@ -62,8 +59,7 @@ tdMMapsModule.itemSelector.getItemList = function ()
     });
 };
 
-tdMMapsModule.itemSelector.updateItemDropdownEntries = function ()
-{
+tdMMapsModule.itemSelector.updateItemDropdownEntries = function () {
     var baseId, itemSelector, items, i, item;
 
     baseId = tdMMapsModule.itemSelector.baseId;
@@ -81,8 +77,7 @@ tdMMapsModule.itemSelector.updateItemDropdownEntries = function ()
     }
 };
 
-tdMMapsModule.itemSelector.updatePreview = function ()
-{
+tdMMapsModule.itemSelector.updatePreview = function () {
     var baseId, items, selectedElement, i;
 
     baseId = tdMMapsModule.itemSelector.baseId;
@@ -112,8 +107,7 @@ tdMMapsModule.itemSelector.updatePreview = function ()
     }
 };
 
-tdMMapsModule.itemSelector.onItemChanged = function ()
-{
+tdMMapsModule.itemSelector.onItemChanged = function () {
     var baseId, itemSelector, preview;
 
     baseId = tdMMapsModule.itemSelector.baseId;
@@ -125,7 +119,7 @@ tdMMapsModule.itemSelector.onItemChanged = function ()
     tdMMapsInitImageViewer();
 };
 
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
     var infoElem;
 
     infoElem = jQuery('#itemSelectorInfo');

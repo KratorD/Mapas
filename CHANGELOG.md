@@ -1,3 +1,3 @@
 # CHANGELOG
 
-Changes in TdMMapsModule 2.0.0
+Changes in TdMMapsModule 1.0.0

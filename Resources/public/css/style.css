@@ -73,23 +73,3 @@ div.tdmmapsmodule-view .avatar img {
     width: auto;
     max-height: 24px;
 }
-
-.z-tabs-content {
-	background: #269 none repeat scroll 0 0;
-	color: #f0f0f0;
-	padding: 15px;
-}
-
-.z-form div.z-formrow select#cmbComp {
-	max-width: 35%;
-}
-.z-form div.z-formrow input#company {
-	max-width: 35%;
-}
-
-.z-form div.z-formrow select#cmbCateg {
-	max-width: 35%;
-}
-.z-form div.z-formrow input#category {
-	max-width: 35%;
-}

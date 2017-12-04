@@ -1,7 +1,6 @@
 'use strict';
 
-function tdMMapsToday(format)
-{
+function tdMMapsToday(format) {
     var timestamp, todayDate, month, day, hours, minutes, seconds;
 
     timestamp = new Date();
@@ -40,8 +39,7 @@ function tdMMapsToday(format)
 }
 
 // returns YYYY-MM-DD even if date is in DD.MM.YYYY
-function tdMMapsReadDate(val, includeTime)
-{
+function tdMMapsReadDate(val, includeTime) {
     // look if we have YYYY-MM-DD
     if (val.substr(4, 1) === '-' && val.substr(7, 1) === '-') {
         return val;
@@ -58,16 +56,14 @@ function tdMMapsReadDate(val, includeTime)
     }
 }
 
-function tdMMapsValidateNoSpace(val)
-{
+function tdMMapsValidateNoSpace(val) {
     var valStr;
     valStr = new String(val);
 
     return (valStr.indexOf(' ') === -1);
 }
 
-function tdMMapsValidateUploadExtension(val, elem)
-{
+function tdMMapsValidateUploadExtension(val, elem) {
     var fileExtension, allowedExtensions;
     if (val === '') {
         return true;
@@ -84,16 +80,15 @@ function tdMMapsValidateUploadExtension(val, elem)
 /**
  * Runs special validation rules.
  */
-function tdMMapsExecuteCustomValidationConstraints(objectType, currentEntityId)
-{
-    jQuery('.validate-nospace').each( function() {
+function tdMMapsExecuteCustomValidationConstraints(objectType, currentEntityId) {
+    jQuery('.validate-nospace').each(function () {
         if (!tdMMapsValidateNoSpace(jQuery(this).val())) {
             document.getElementById(jQuery(this).attr('id')).setCustomValidity(Translator.__('This value must not contain spaces.'));
         } else {
             document.getElementById(jQuery(this).attr('id')).setCustomValidity('');
         }
     });
-    jQuery('.validate-upload').each( function() {
+    jQuery('.validate-upload').each(function () {
         if (!tdMMapsValidateUploadExtension(jQuery(this).val(), jQuery(this))) {
             document.getElementById(jQuery(this).attr('id')).setCustomValidity(Translator.__('Please select a valid file extension.'));
         } else {

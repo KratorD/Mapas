@@ -2,11 +2,6 @@
 {% set baseTemplate = app.request.query.getBoolean('raw', false) ? 'raw' : (routeArea == 'admin' ? 'adminBase' : 'base') %}
 {% extends 'TdMMapsModule::' ~ baseTemplate ~ '.html.twig' %}
 
-{% block header %}
-    {{ parent() }}
-    {{ pageAddAsset('javascript', zasset('@TdMMapsModule:js/TdMMapsModule.Validation.js'), 98) }}
-    {{ pageAddAsset('javascript', zasset('@TdMMapsModule:js/TdMMapsModule.EditFunctions.js'), 99) }}
-{% endblock %}
 {% block title mode == 'create' ? __('Create map') : __('Edit map') %}
 {% block admin_page_icon mode == 'create' ? 'plus' : 'pencil-square-o' %}
 {% block content %}
@@ -37,9 +32,15 @@
             {{ form_row(form.description) }}
             {{ form_row(form.foreground) }}
             {{ form_row(form.underground) }}
-            {{ form_row(form.scoreRev) }}
-            {{ form_row(form.nScoreRev) }}
-            {{ form_row(form.nDownloads) }}
+            <div class="hidden">
+                {{ form_row(form.scoreRev) }}
+            </div>
+            <div class="hidden">
+                {{ form_row(form.nScoreRev) }}
+            </div>
+            <div class="hidden">
+                {{ form_row(form.nDownloads) }}
+            </div>
         </fieldset>
         
         {% if mode != 'create' %}
@@ -96,21 +97,22 @@
 {% endblock %}
 {% block footer %}
     {{ parent() }}
+    {{ pageAddAsset('javascript', zasset('@TdMMapsModule:js/TdMMapsModule.Validation.js'), 98) }}
+    {{ pageAddAsset('javascript', zasset('@TdMMapsModule:js/TdMMapsModule.EditFunctions.js'), 99) }}
     {% set formInitScript %}
-        <script type="text/javascript">
+        <script>
         /* <![CDATA[ */
             
             ( function($) {
                 $(document).ready(function() {
-                    // initialise auto completion for user fields
-                    {% if form.moderationSpecificCreator is defined %}
-                        initUserLiveSearch('tdmmapsmodule_map_moderationSpecificCreator');
-                    {% endif %}
                     tdMMapsInitEditForm('{{ mode }}', '{% if mode != 'create' %}{{ map.id }}{% endif %}');
                     tdMMapsInitUploadField('tdmmapsmodule_map_mapFile_mapFile');
                     tdMMapsInitDateField('tdmmapsmodule_map_createDat');
                     tdMMapsInitUploadField('tdmmapsmodule_map_foreground_foreground');
                     tdMMapsInitUploadField('tdmmapsmodule_map_underground_underground');
+                    {% if form.moderationSpecificCreator is defined %}
+                        initUserLiveSearch('tdmmapsmodule_map_moderationSpecificCreator');
+                    {% endif %}
                 });
             })(jQuery);
         /* ]]> */

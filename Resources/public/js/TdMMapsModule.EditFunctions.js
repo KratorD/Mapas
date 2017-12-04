@@ -3,8 +3,7 @@
 /**
  * Resets the value of an upload / file input field.
  */
-function tdMMapsResetUploadField(fieldName)
-{
+function tdMMapsResetUploadField(fieldName) {
     jQuery('#' + fieldName).attr('type', 'input');
     jQuery('#' + fieldName).attr('type', 'file');
 }
@@ -12,8 +11,7 @@ function tdMMapsResetUploadField(fieldName)
 /**
  * Initialises the reset button for a certain upload input.
  */
-function tdMMapsInitUploadField(fieldName)
-{
+function tdMMapsInitUploadField(fieldName) {
     jQuery('#' + fieldName + 'ResetVal').click(function (event) {
         event.preventDefault();
         tdMMapsResetUploadField(fieldName);
@@ -23,8 +21,7 @@ function tdMMapsInitUploadField(fieldName)
 /**
  * Initialises the reset button for a certain date input.
  */
-function tdMMapsInitDateField(fieldName)
-{
+function tdMMapsInitDateField(fieldName) {
     jQuery('#' + fieldName + 'ResetVal').click(function (event) {
         event.preventDefault();
         jQuery('#' + fieldName).val('');
@@ -37,8 +34,7 @@ var editForm;
 var formButtons;
 var triggerValidation = true;
 
-function tdMMapsTriggerFormValidation()
-{
+function tdMMapsTriggerFormValidation() {
     tdMMapsExecuteCustomValidationConstraints(editedObjectType, editedEntityId);
 
     if (!editForm.get(0).checkValidity()) {
@@ -68,8 +64,7 @@ function tdMMapsHandleFormSubmit (event) {
 /**
  * Initialises an entity edit form.
  */
-function tdMMapsInitEditForm(mode, entityId)
-{
+function tdMMapsInitEditForm(mode, entityId) {
     if (jQuery('.tdmmaps-edit-form').length < 1) {
         return;
     }
@@ -97,11 +92,13 @@ function tdMMapsInitEditForm(mode, entityId)
     });
 
     formButtons = editForm.find('.form-buttons input');
-    editForm.find('.btn-danger').first().bind('click keypress', function (event) {
-        if (!window.confirm(Translator.__('Do you really want to delete this entry?'))) {
-            event.preventDefault();
-        }
-    });
+    if (editForm.find('.btn-danger').length > 0) {
+        editForm.find('.btn-danger').first().bind('click keypress', function (event) {
+            if (!window.confirm(Translator.__('Do you really want to delete this entry?'))) {
+                event.preventDefault();
+            }
+        });
+    }
     editForm.find('button[type=submit]').bind('click keypress', function (event) {
         triggerValidation = !jQuery(this).prop('formnovalidate');
     });

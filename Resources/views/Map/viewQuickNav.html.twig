@@ -60,6 +60,13 @@
             {% if gameTypeFilter is defined and gameTypeFilter != true %}
                 </div>
             {% endif %}
+            {% if mapStyleFilter is defined and mapStyleFilter != true %}
+                <div class="hidden">
+            {% endif %}
+                {{ form_row(quickNavForm.mapStyle) }}
+            {% if mapStyleFilter is defined and mapStyleFilter != true %}
+                </div>
+            {% endif %}
             {% if searchFilter is defined and searchFilter != true %}
                 <div class="hidden">
             {% endif %}

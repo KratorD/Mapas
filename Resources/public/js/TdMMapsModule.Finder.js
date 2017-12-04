@@ -7,8 +7,7 @@ var currentTdMMapsModuleInput = null;
  * Returns the attributes used for the popup window. 
  * @return {String}
  */
-function getTdMMapsModulePopupAttributes()
-{
+function getTdMMapsModulePopupAttributes() {
     var pWidth, pHeight;
 
     pWidth = screen.width * 0.75;
@@ -20,8 +19,7 @@ function getTdMMapsModulePopupAttributes()
 /**
  * Open a popup window with the finder triggered by an editor button.
  */
-function TdMMapsModuleFinderOpenPopup(editor, editorName)
-{
+function TdMMapsModuleFinderOpenPopup(editor, editorName) {
     var popupUrl;
 
     // Save editor for access in selector window
@@ -41,8 +39,7 @@ var tdMMapsModule = {};
 
 tdMMapsModule.finder = {};
 
-tdMMapsModule.finder.onLoad = function (baseId, selectedId)
-{
+tdMMapsModule.finder.onLoad = function (baseId, selectedId) {
     var imageModeEnabled;
 
     if (jQuery('#tdMMapsModuleSelectorForm').length < 1) {
@@ -72,13 +69,11 @@ tdMMapsModule.finder.onLoad = function (baseId, selectedId)
     });
 };
 
-tdMMapsModule.finder.onParamChanged = function ()
-{
+tdMMapsModule.finder.onParamChanged = function () {
     jQuery('#tdMMapsModuleSelectorForm').submit();
 };
 
-tdMMapsModule.finder.handleCancel = function (event)
-{
+tdMMapsModule.finder.handleCancel = function (event) {
     var editor;
 
     event.preventDefault();
@@ -97,8 +92,7 @@ tdMMapsModule.finder.handleCancel = function (event)
 };
 
 
-function tdMMapsGetPasteSnippet(mode, itemId)
-{
+function tdMMapsGetPasteSnippet(mode, itemId) {
     var quoteFinder;
     var itemPath;
     var itemUrl;
@@ -152,8 +146,7 @@ function tdMMapsGetPasteSnippet(mode, itemId)
 
 
 // User clicks on "select item" button
-tdMMapsModule.finder.selectItem = function (itemId)
-{
+tdMMapsModule.finder.selectItem = function (itemId) {
     var editor, html;
 
     html = tdMMapsGetPasteSnippet('html', itemId);
@@ -179,12 +172,11 @@ tdMMapsModule.finder.selectItem = function (itemId)
     tdMMapsClosePopup();
 };
 
-function tdMMapsClosePopup()
-{
+function tdMMapsClosePopup() {
     window.opener.focus();
     window.close();
 }
 
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
     tdMMapsModule.finder.onLoad();
 });
