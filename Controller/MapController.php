@@ -63,7 +63,27 @@ class MapController extends AbstractMapController
      */
     public function indexAction(Request $request)
     {
-        return parent::indexAction($request);
+        //return parent::indexAction($request);
+		$repository = $this->get('tdm_maps_module.entity_factory')->getRepository('map');
+		$where = '';
+		$sort = 'createdDate';
+		$sortdir = 'DESC';
+		$currentPage = '1';
+		$resultsPerPage = '10';
+		list($lastTen, $objectCount) = $repository->selectWherePaginated($where, $sort . ' ' . $sortdir, $currentPage, $resultsPerPage);
+		// Top 10 Cartographer
+		$topTenCar = $repository->getTopTen();
+		
+		// Top Downloads
+		$sort = 'nDownloads';
+		list($mostDown, $nmostDown) = $repository->selectWherePaginated($where, $sort . ' ' . $sortdir, $currentPage, $resultsPerPage);
+		//Render Page
+		return $this->render('TdMMapsModule:Custom:index.html.twig', [
+            'lastTen' => $lastTen,
+			'topTenCar' => $topTenCar,
+			'mostDown' => $mostDown,
+			'nmaps' => $objectCount
+        ]);
     }
     /**
      * @inheritDoc

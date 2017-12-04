@@ -22,4 +22,30 @@ use TdM\MapsModule\Entity\Repository\Base\AbstractMapRepository;
 class MapRepository extends AbstractMapRepository
 {
     // feel free to add your own methods here, like for example reusable DQL queries
+	public function getTopTen()
+    {
+		//$dql = "SELECT a.id, a.name, (a.scoreRev / a.nScoreRev) AS puntuacion FROM Maps_Entity_Maps a WHERE a.mapState = 'Comprobado' ORDER BY puntuacion DESC";
+		$selection = "tbl.id, tbl.name, (tbl.scoreRev / tbl.nScoreRev) AS puntuacion";
+		$where = "tbl.workflowState = 'approved'";
+		$orderBy = "puntuacion DESC";
+		$qb = $this->getEntityManager()->createQueryBuilder();
+		$qb->select($selection)
+           ->from($this->mainEntityClass, 'tbl');
+		$qb->andWhere($where);
+		$qb->add('orderBy', $orderBy);
+		// generate query
+        $query = $this->_em->createQuery($qb);
+		$query->setMaxResults('10');
+		try {
+            $result = $query->getResult();
+        } catch (Exception $e) {
+            echo "<pre>";
+            var_dump($e->getMessage());
+            var_dump($query->getDQL());
+            var_dump($query->getParameters());
+            var_dump($query->getSQL());
+            die;
+        }
+        return $result;
+	}
 }
