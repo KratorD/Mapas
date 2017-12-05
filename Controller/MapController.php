@@ -177,7 +177,46 @@ class MapController extends AbstractMapController
      */
     public function displayAction(Request $request, MapEntity $map)
     {
-        return parent::displayAction($request, $map);
+        //return parent::displayAction($request, $map);
+		// parameter specifying which type of objects we are treating
+        $objectType = 'map';
+        $permLevel = ACCESS_READ;
+        if (!$this->hasPermission('TdMMapsModule:' . ucfirst($objectType) . ':', '::', $permLevel)) {
+            throw new AccessDeniedException();
+        }
+        // create identifier for permission check
+        $instanceId = $map->getKey();
+        if (!$this->hasPermission('TdMMapsModule:' . ucfirst($objectType) . ':', $instanceId . '::', $permLevel)) {
+            throw new AccessDeniedException();
+        }
+        
+        if ($map->getWorkflowState() != 'approved' && !$this->hasPermission('TdMMapsModule:' . ucfirst($objectType) . ':', $instanceId . '::', ACCESS_ADMIN)) {
+            throw new AccessDeniedException();
+        }
+
+		//Score
+		if ($map->getNScoreRev() == 0){
+			$score = 0;
+		}else{
+			$score = round( $map->getScoreRev() / $map->getNScoreRev() );
+		}
+
+		$templateParameters = [
+            'routeArea' => '',
+            $objectType => $map
+        ];
+        
+        $controllerHelper = $this->get('tdm_maps_module.controller_helper');
+        $templateParameters = $controllerHelper->processDisplayActionParameters($objectType, $templateParameters, true);
+//dump($templateParameters);die();
+		//Render Page
+		//$response = $this->get('tdm_maps_module.view_helper')->processTemplate($objectType, 'display', $templateParameters);
+		return $this->render('TdMMapsModule:Custom:display.html.twig', [
+            'map' => $map,
+			'routeArea' => '',
+			'score' => $score,
+			'templateParameters' => $templateParameters
+        ]);
     }
     /**
      * @inheritDoc
