@@ -1,0 +1,255 @@
+{# purpose of this template: maps display view #}
+{% set baseTemplate = app.request.query.getBoolean('raw', false) ? 'raw' : (routeArea == 'admin' ? 'adminBase' : 'base') %}
+{% extends 'TdMMapsModule::' ~ baseTemplate ~ '.html.twig' %}
+{% block pageTitle %}{{ map|tdmmapsmodule_formattedTitle|default(__('Map')) }}{% endblock %}
+{% block title %}
+    {% set templateTitle = map|tdmmapsmodule_formattedTitle|default(__('Map')) %}
+    {{ templateTitle|notifyFilters('tdmmapsmodule.filter_hooks.maps.filter')|safeHtml }}{% if routeArea == 'admin' %} <small>({{ map.workflowState|tdmmapsmodule_objectState(false)|lower }})</small>{% endif %}
+    {% set itemActions = knp_menu_get('TdMMapsModule:ItemActionsMenu:menu', [], {entity: map, area: routeArea, context: 'display'}) %}
+    <div class="dropdown">
+        <a id="itemActions{{ map.getKey() }}DropDownToggleStart" role="button" data-toggle="dropdown" data-target="#" href="javascript:void(0);" class="hidden dropdown-toggle"><i class="fa fa-tasks"></i> {{ __('Actions') }} <span class="caret"></span></a>
+        {{ knp_menu_render(itemActions, {template: 'ZikulaMenuModule:Override:bootstrap_fontawesome.html.twig'}) }}
+    </div>
+{% endblock %}
+{% block admin_page_icon 'eye' %}
+{% block content %}
+    {% set isQuickView = app.request.query.getBoolean('raw', false) %}
+    <div class="tdmmapsmodule-map tdmmapsmodule-display">
+
+    <dl>
+        {% if map.workflowState is not empty and routeArea == 'admin' %}
+            <dt>{{ __('State') }}</dt>
+            <dd>{{ map.workflowState|tdmmapsmodule_listEntry('map', 'workflowState') }}</dd>
+        {% endif %}
+		<table width="700" border="0" cellspacing="0" cellpadding="0" align="center">
+			{# Bloque 1: Nombre del Mapa, Autor, Ruta del Archivo #}
+			<tr>
+				<td>
+					<table width="700" border="0" cellpadding="0" cellspacing="0" id="Bloque1">
+						<tr>
+							<td><br>				
+								<table width="100%" border="0" cellpadding="0" cellspacing="0">
+									<tr>
+										<td align="left">{{ __('Map\'s name') }}:&nbsp;<input name="NombreMapa" type="text" id="NombreMapa" size="40" READONLY value="{{ map.name }}"></td>
+										<td align="right">{{ __('Author') }}:&nbsp;<input name="Autor" type="text" id="Autor" size="40" READONLY value="{{ map.author }}"></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			
+			{# Bloque 2: ¿Mapa en Pruebas?, Juego #}
+			<tr>
+				<td>
+					<table width="700" border="0" cellpadding="0" cellspacing="0" id="Bloque2">
+						<tr>
+							<td><br>
+								<table width="100%" border="0" cellpadding="0" cellspacing="0">
+									<tr>
+										<td align="left">{{ __('Test state') }}:&nbsp;<input name="NombreMapa" type="text" id="NombreMapa" size="40" READONLY value="{{ map.testState|tdmmapsmodule_listEntry('map', 'testState') }}"></td>
+										<td align="right">{{ __('Game') }}:&nbsp;<input name="Autor" type="text" id="Autor" size="40" READONLY value="{{ map.game|tdmmapsmodule_listEntry('map', 'game') }}"></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			
+			{# Bloque 3: TamanoMapa, TieneSub, Idioma #}
+			<tr>
+				<td>
+					<table width="700" border="0" cellpadding="0" cellspacing="0" id="Bloque3">
+						<tr>
+							<td align="left">
+								{{ __('Size map') }}:&nbsp;<select name="TamanoMapa" size="1">
+									<option value="{{ map.sizeMap|tdmmapsmodule_listEntry('map', 'sizeMap') }}" selected>{{ map.sizeMap|tdmmapsmodule_listEntry('map', 'sizeMap') }}</option>
+								</select>
+							</td>
+							<td align="center">
+								{{ __('Sub?') }}:&nbsp;
+								<input id="bUnderground" class="z-form-checkbox" type="checkbox" name="bUnderground" {% if map.bUnderground %}checked{% endif %} DISABLED>
+							</td>
+							<td align="right">
+								{{ __('Language') }}:&nbsp;<select name="Idioma" size="1">
+								<option>{{ map.languageMap|tdmmapsmodule_listEntry('map', 'languageMap') }}</option>
+								</select>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+				
+			<tr><td>&nbsp;</td></tr>
+			
+			{# Bloque 4: Email-Autor, FechaCreacion, Version #}
+			<tr>
+				<td>
+					<table width="700" border="0" cellpadding="0" cellspacing="0" id="Bloque4">
+						<tr>
+							<td><br>
+								<table width="100%" border="0" cellpadding="0" cellspacing="0">
+									<tr>
+										<td align="left">{{ __('Version') }}:&nbsp;<input name="Version" type="text" id="Version" size="5" READONLY value="{{ map.versionMap }}"></td>
+										<td align="center">&nbsp;</td>
+										<td align="right">{{ __('Creation date') }}:&nbsp;<input name="map[createdat]" type="text" id="map[createdat]" size="20" READONLY value="{{ map.createDat|localizeddate('medium', 'none') }}"></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			
+			{# Bloque 5: Dificultad, NHumanos, Njugadores, TipoJuego, EstiloMapa #}
+			<tr>
+				<td>
+					<table width="700" border="0" cellpadding="0" cellspacing="0" id="Bloque5">
+						<tr>
+							<td><br>
+								<table width="100%" border="0" cellpadding="0" cellspacing="0">
+									<tr>
+										<td align="left">
+											{{ __('Difficulty') }}:&nbsp;<select name="Dificultad" size="1">
+												<option>{{ map.difficulty|tdmmapsmodule_listEntry('map', 'difficulty') }}</option>
+											</select>
+										</td>
+										<td align="center">
+											{{ __('N.Humans') }}:&nbsp;<select name="NHumanos" size="1">
+												<option>{{ map.nHumans }}</option>
+											</select>
+										</td>
+										<td align="center">
+											{{ __('N.Players') }}:&nbsp;<select name="NJugadores" size="1">
+												<option>{{ map.nPlayers }}</option>
+											</select>
+										</td>
+										<td align="right">
+											{{ __('Game Type') }}:&nbsp;<select name="TipoJuego" size="1">
+												<option>{{ map.gameType|tdmmapsmodule_listEntry('map', 'gameType') }}</option>
+											</select>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			
+			{# Bloque 6: Descripción #}
+			<tr>
+				<td>
+					<table width="700" border="0" cellpadding="0" cellspacing="0" id="Bloque6">
+						<tr>
+							<td>{{ __('Description') }}:</td>
+						</tr>
+						<tr>
+							<td><textarea name="Descripcion" cols="94" rows="3" id="Descripcion" READONLY>{{ map.description|safeHtml }}</textarea></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			
+			<tr><td>&nbsp;</td></tr>
+		
+			<tr>
+				<td>
+					<table width="100%" border="0" cellpadding="0" cellspacing="0" id="Bloque7">
+						<tr>
+							<td>
+								<table width="100%" border="0" cellpadding="0" cellspacing="0">
+									<tr>
+										{% if map.foreground is not empty %}
+										<td align="center" width="50%">{{ __('Foreground') }}<br>
+											{% if map.foreground is not empty and map.foregroundMeta|default %}
+												<a href="{{ map.foregroundUrl }}" title="{{ map|tdmmapsmodule_formattedTitle|e('html_attr') }}"{% if map.foregroundMeta.isImage %} class="image-link"{% endif %}>
+												{% if map.foregroundMeta.isImage %}
+													{% set thumbOptions = {size: {100, 75}, mode: 'inset' } %}
+													{#% set thumbOptions = attribute(thumbRuntimeOptions, 'mapForeground') %#}
+													<img src="{{ map.foreground.getPathname()|imagine_filter('zkroot', thumbOptions) }}" alt="{{ map|tdmmapsmodule_formattedTitle|e('html_attr') }}" width="{{ thumbOptions.thumbnail.size[0] }}" height="{{ thumbOptions.thumbnail.size[1] }}" class="img-thumbnail" />
+												{% else %}
+													{{ __('Download') }} ({{ map.foregroundMeta.size|tdmmapsmodule_fileSize(map.foreground.getPathname(), false, false) }})
+												{% endif %}
+												</a>
+											{% else %}&nbsp;{% endif %}
+										</td>
+										{% endif %}
+										{% if map.underground is not empty %}
+										<td align="center" width="50%">{{ __('Background') }}<br>
+											{% if map.underground is not empty and map.undergroundMeta|default %}
+												<a href="{{ map.undergroundUrl }}" title="{{ map|tdmmapsmodule_formattedTitle|e('html_attr') }}"{% if map.undergroundMeta.isImage %} class="image-link"{% endif %}>
+												{% if map.undergroundMeta.isImage %}
+													{% set thumbOptions = attribute(thumbRuntimeOptions, 'mapUnderground') %}
+													<img src="{{ map.underground.getPathname()|imagine_filter('zkroot', thumbOptions) }}" alt="{{ map|tdmmapsmodule_formattedTitle|e('html_attr') }}" width="{{ thumbOptions.thumbnail.size[0] }}" height="{{ thumbOptions.thumbnail.size[1] }}" class="img-thumbnail" />
+												{% else %}
+													{{ __('Download') }} ({{ map.undergroundMeta.size|tdmmapsmodule_fileSize(map.underground.getPathname(), false, false) }})
+												{% endif %}
+												</a>
+											{% else %}&nbsp;{% endif %}
+										</td>
+										{% endif %}
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+
+			<tr><td>&nbsp;</td></tr>
+
+			<tr>
+				<td>
+					<table width="100%" border="0" cellpadding="0" cellspacing="0" id="Bloque7">
+						<tr>
+							<td>
+								<table width="100%" border="0" cellpadding="0" cellspacing="0">
+									<tr>
+										<td align="left"><strong>{{ __('Filesize') }}</strong>:&nbsp;{{ map.mapFileMeta.size|tdmmapsmodule_fileSize(map.mapFile.getPathname(), false, false) }}</td>
+										<td align="center"><strong>{{ __('Created at') }}</strong>:&nbsp;{{ map.createDat|localizeddate('medium', 'none') }}</td>
+										<td align="right"><strong>{{ __('N.Downloads') }}</strong>:&nbsp;{{ map.nDownloads }}</td>
+										<td align="right"><strong>{{ __('Score') }}</strong>:&nbsp;{{ score }}</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+
+			<tr><td>&nbsp;</td></tr>
+		</table>
+
+        <center>
+			{% if map.mapFile is not empty %}
+				{% if map.mapFileMeta|default %}
+				<a href="{{ map.mapFileUrl }}" title="{{ map|tdmmapsmodule_formattedTitle|e('html_attr') }}"{% if map.mapFileMeta.isImage %} class="image-link"{% endif %}>
+				{% if map.mapFileMeta.isImage %}
+					{% set thumbOptions = attribute(thumbRuntimeOptions, 'mapMapFile') %}
+					<img src="{{ map.mapFile.getPathname()|imagine_filter('zkroot', thumbOptions) }}" alt="{{ map|tdmmapsmodule_formattedTitle|e('html_attr') }}" width="{{ thumbOptions.thumbnail.size[0] }}" height="{{ thumbOptions.thumbnail.size[1] }}" class="img-thumbnail" />
+				{% else %}
+					{{ __('Download map') }} ({{ map.mapFileMeta.size|tdmmapsmodule_fileSize(map.mapFile.getPathname(), false, false) }})
+				{% endif %}
+				</a>
+				{% endif %}
+
+			{% endif %}
+		</center>
+
+        
+            <dt>{{ __('Map style') }}</dt>
+            <dd>{{ map.mapStyle|tdmmapsmodule_listEntry('map', 'mapStyle') }}</dd>
+        
+
+        
+    </dl>
+
+    {#{ include('@TdMMapsModule/Helper/includeStandardFieldsDisplay.html.twig', {obj: map}) }#}
+
+    {{ block('display_hooks') }}
+</div>
+{% endblock %}
+
