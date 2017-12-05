@@ -139,6 +139,23 @@
 				</td>
 			</tr>
 			
+			{# Map style #}
+			<tr>
+				<td>
+					<table width="700" border="0" cellpadding="0" cellspacing="0" id="Bloque1">
+						<tr>
+							<td><br>				
+								<table width="100%" border="0" cellpadding="0" cellspacing="0">
+									<tr>
+										<td align="left">{{ __('Map style') }}:&nbsp;<input name="NombreMapa" type="text" id="NombreMapa" size="100" READONLY value="{{ map.mapStyle|tdmmapsmodule_listEntry('map', 'mapStyle') }}"></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+
 			{# Bloque 6: Descripción #}
 			<tr>
 				<td>
@@ -167,7 +184,7 @@
 											{% if map.foreground is not empty and map.foregroundMeta|default %}
 												<a href="{{ map.foregroundUrl }}" title="{{ map|tdmmapsmodule_formattedTitle|e('html_attr') }}"{% if map.foregroundMeta.isImage %} class="image-link"{% endif %}>
 												{% if map.foregroundMeta.isImage %}
-													{% set thumbOptions = {size: {100, 75}, mode: 'inset' } %}
+													{% set thumbOptions = {thumbnail: {size: [100, 75], mode: 'inset' }} %}
 													{#% set thumbOptions = attribute(thumbRuntimeOptions, 'mapForeground') %#}
 													<img src="{{ map.foreground.getPathname()|imagine_filter('zkroot', thumbOptions) }}" alt="{{ map|tdmmapsmodule_formattedTitle|e('html_attr') }}" width="{{ thumbOptions.thumbnail.size[0] }}" height="{{ thumbOptions.thumbnail.size[1] }}" class="img-thumbnail" />
 												{% else %}
@@ -182,7 +199,7 @@
 											{% if map.underground is not empty and map.undergroundMeta|default %}
 												<a href="{{ map.undergroundUrl }}" title="{{ map|tdmmapsmodule_formattedTitle|e('html_attr') }}"{% if map.undergroundMeta.isImage %} class="image-link"{% endif %}>
 												{% if map.undergroundMeta.isImage %}
-													{% set thumbOptions = attribute(thumbRuntimeOptions, 'mapUnderground') %}
+													{#% set thumbOptions = attribute(thumbRuntimeOptions, 'mapUnderground') %#}
 													<img src="{{ map.underground.getPathname()|imagine_filter('zkroot', thumbOptions) }}" alt="{{ map|tdmmapsmodule_formattedTitle|e('html_attr') }}" width="{{ thumbOptions.thumbnail.size[0] }}" height="{{ thumbOptions.thumbnail.size[1] }}" class="img-thumbnail" />
 												{% else %}
 													{{ __('Download') }} ({{ map.undergroundMeta.size|tdmmapsmodule_fileSize(map.underground.getPathname(), false, false) }})
@@ -239,12 +256,6 @@
 			{% endif %}
 		</center>
 
-        
-            <dt>{{ __('Map style') }}</dt>
-            <dd>{{ map.mapStyle|tdmmapsmodule_listEntry('map', 'mapStyle') }}</dd>
-        
-
-        
     </dl>
 
     {#{ include('@TdMMapsModule/Helper/includeStandardFieldsDisplay.html.twig', {obj: map}) }#}
